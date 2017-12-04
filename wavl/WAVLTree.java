@@ -230,6 +230,11 @@ public class WAVLTree {
 		  
 		  static final int rank = -1;
 		  private IWAVLNode	dad;
+
+		  
+		  public WAVLVirtualNode() {
+			  dad = null;
+		  }
 		  
 		  public WAVLVirtualNode(IWAVLNode dad) {
 			  this.dad = dad;
