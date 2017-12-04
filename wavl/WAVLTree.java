@@ -166,6 +166,10 @@ public class WAVLTree {
    * (It must implement IWAVLNode)
    */
   public class WAVLNode implements IWAVLNode{
+	  
+	  private int key;
+	  private String val;
+	  
 		public int getKey()
 		{
 			return 42; // to be replaced by student code
