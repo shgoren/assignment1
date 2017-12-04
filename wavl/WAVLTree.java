@@ -1,4 +1,4 @@
-/**
+/** Ran Armony & Shahaf Goren
  *
  * WAVLTree
  *
