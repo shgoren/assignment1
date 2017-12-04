@@ -9,6 +9,9 @@
 
 public class WAVLTree {
 
+	private IWAVLNode root;
+	
+	
   /**
    * public boolean empty()
    *
@@ -165,49 +168,103 @@ public class WAVLTree {
    * This class can and must be modified.
    * (It must implement IWAVLNode)
    */
-  public class WAVLNode implements IWAVLNode{
-	  
-	  private int key;
-	  private String val;
-	  private WAVLNode rightSon,
-	  					leftSon,
-	  					dad;
-	  
-	  public WAVLNode(int key, String val, WAVLNode dad) {
-		  this.key = key;
-		  this.val = val;
-		  this.dad = dad;
-		  rightSon = null;
-		  leftSon = null;
+	  public class WAVLNode implements IWAVLNode{
+		  
+		  private int key;
+		  private String val;
+		  private IWAVLNode rightSon,
+		  					leftSon,
+		  					dad;
+		  
+		  public WAVLNode() {
+			  
+		  }
+
+		  // root constructor
+		  public WAVLNode(int key, String val) {
+			  this.key = key;
+			  this.val = val;
+			  rightSon = new WAVLVirtualNode(this);
+			  leftSon = new WAVLVirtualNode(this);
+		  }
+		  // leaf constructor
+		  public WAVLNode(int key, String val, IWAVLNode dad) {
+			  this.key = key;
+			  this.val = val;
+			  this.dad = dad;
+			  rightSon = new WAVLVirtualNode(this);
+			  leftSon = new WAVLVirtualNode(this);
+		  }
+		  
+			public int getKey()
+			{
+				
+				return 42; // to be replaced by student code
+			}
+			public String getValue()
+			{
+				return null; // to be replaced by student code
+			}
+			public IWAVLNode getLeft()
+			{
+				return null; // to be replaced by student code
+			}
+			public IWAVLNode getRight()
+			{
+				return null; // to be replaced by student code
+			}
+			// Returns True if this is a non-virtual WAVL node (i.e not a virtual leaf or a sentinal)
+			public boolean isRealNode()
+			{
+				return true; // to be replaced by student code
+			}
+
+			public int getSubtreeSize()
+			{
+				return 42; // to be replaced by student code
+			}
 	  }
 	  
-		public int getKey()
-		{
-			return 42; // to be replaced by student code
-		}
-		public String getValue()
-		{
-			return null; // to be replaced by student code
-		}
-		public IWAVLNode getLeft()
-		{
-			return null; // to be replaced by student code
-		}
-		public IWAVLNode getRight()
-		{
-			return null; // to be replaced by student code
-		}
-		// Returns True if this is a non-virtual WAVL node (i.e not a virtual leaf or a sentinal)
-		public boolean isRealNode()
-		{
-			return true; // to be replaced by student code
-		}
+	  
+	  public class WAVLVirtualNode implements IWAVLNode{
+		  
+		  static final int rank = -1;
+		  private IWAVLNode	dad;
+		  
+		  public WAVLVirtualNode(IWAVLNode dad) {
+			  this.dad = dad;
+		  }
+		  
+			public int getKey()
+			{
+				
+				return 42; // to be replaced by student code
+			}
+			public String getValue()
+			{
+				return null; // to be replaced by student code
+			}
+			public IWAVLNode getLeft()
+			{
+				return null; // to be replaced by student code
+			}
+			public IWAVLNode getRight()
+			{
+				return null; // to be replaced by student code
+			}
+			// Returns True if this is a non-virtual WAVL node (i.e not a virtual leaf or a sentinal)
+			public boolean isRealNode()
+			{
+				return true; // to be replaced by student code
+			}
 
-		public int getSubtreeSize()
-		{
-			return 42; // to be replaced by student code
-		}
-  }
+			public int getSubtreeSize()
+			{
+				return 42; // to be replaced by student code
+			}
+	  }
+	  
+  
 
 }
   
