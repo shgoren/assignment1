@@ -148,8 +148,8 @@ public class WAVLTree {
 	   * ! Do not delete or modify this - otherwise all tests will fail !
 	   */
 	public interface IWAVLNode{	
-		public int getKey(); //returns node's key (for virtuval node return -1)
-		public String getValue(); //returns node's value [info] (for virtuval node return null)
+		public int getKey(); //returns node's key (for virtual node return -1)
+		public String getValue(); //returns node's value [info] (for virtual node return null)
 		public IWAVLNode getLeft(); //returns left child (if there is no left child return null)
 		public IWAVLNode getRight(); //returns right child (if there is no right child return null)
 		public boolean isRealNode(); // Returns True if this is a non-virtual WAVL node (i.e not a virtual leaf or a sentinal)
@@ -169,6 +169,17 @@ public class WAVLTree {
 	  
 	  private int key;
 	  private String val;
+	  private WAVLNode rightSon,
+	  					leftSon,
+	  					dad;
+	  
+	  public WAVLNode(int key, String val, WAVLNode dad) {
+		  this.key = key;
+		  this.val = val;
+		  this.dad = dad;
+		  rightSon = null;
+		  leftSon = null;
+	  }
 	  
 		public int getKey()
 		{
