@@ -27,14 +27,6 @@ public class WAVLTree {
 		
 
 		
-		root.leftSon.dad = root;
-		root.leftSon.leftSon.dad = root.leftSon;
-		root.leftSon.leftSon.leftSon.dad = root.leftSon.leftSon;
-		root.leftSon.rightSon.dad = root.leftSon;
-		root.rightSon.dad = root;
-		root.rightSon.leftSon.dad = root.rightSon;
-		root.rightSon.rightSon.dad = root.rightSon;
-		
 	}
 	
 	/**
@@ -75,8 +67,30 @@ public class WAVLTree {
 	 * k already exists in the tree.
 	 */
 	public int insert(int k, String i) {
-		
-		return 42;
+		WAVLNode place = root.searchNode(k);
+		if(place.isRealNode())
+			return -1;
+		WAVLNode nodeDad = root.searchNode(k);
+		WAVLNode node  = new WAVLNode(k,i,nodeDad);
+		if(node.getKey()>nodeDad.getKey())
+			nodeDad.rightSon = node;
+		nodeDad.leftSon = node;
+		int ops = reBalance(node);	
+		return ops;
+	}
+	
+	public int reBalance(WAVLNode node) {
+		int ops = 0;
+		WAVLNode curr = node.dad;
+		while(curr!=null) {
+			if(curr.needsPromote()) {
+				promote(curr);
+			}
+				
+			
+			
+		}
+		return ops;
 	}
 
 	/**
@@ -138,8 +152,17 @@ public class WAVLTree {
 	 * respective keys, or an empty array if the tree is empty.
 	 */
 	public String[] infoToArray() {
-		String[] arr = new String[42]; // to be replaced by student code
-		return arr; // to be replaced by student code
+		String[] arr = new String[root.getSubtreeSize()];
+		WAVLNode curr = root.minNode();
+		int i=0;
+		while(curr!=null && curr.isRealNode()){
+			arr[i]=curr.getValue();
+			WAVLNode temp = curr.successor();
+			curr = temp;
+			i++;
+		}
+		
+		return arr; 
 	}
 
 	/**
@@ -338,15 +361,78 @@ public class WAVLTree {
 		
 		public WAVLNode predeccessor() {
 			if(leftSon.isRealNode())
-				return leftSon.maxNode();
-			WAVLNode ans = getDad();
-			while(ans!=null && ans.getLeft()==this) {
-				WAVLNode temp = ans.getDad();
-				ans = temp;
+				return leftSon.minNode();
+			WAVLNode prev = this;
+			WAVLNode ans = prev.getDad();
+			while(ans!=null && ans.getLeft()==prev) {
+				prev = ans;
+				ans = prev.getDad();
 			}
 			
 			return ans;
 		}
+		
+		public int[] difs() {
+			if(!isReal)
+				return null;
+			int[] difs = new int[2];
+			difs[0] = this.getRank() - this.getLeft().getRank();
+			difs[1] = this.getRank() - this.getRight().getRank();
+			return difs;
+		}
+		
+		public boolean isValidDifs(){
+			int[] difs = this.difs();
+			int[] opt1 = {1,2};
+			int[] opt2 = {1,1};
+			int[] opt3 = {2,1};
+			if(difs.equals(opt1)||difs.equals(opt2)||difs.equals(opt3))
+					return true;
+			return false;
+		}
+		
+		public boolean needsPromote(){
+			int[] difs = this.difs();
+			int[] opt1 = {1,0};
+			int[] opt2 = {0,1};
+			if(difs.equals(opt1)||difs.equals(opt2))
+					return true;
+			return false;
+		}
+		
+		public boolean needsRotate(){
+			int[] difs = this.difs();
+			int[] opt1 = {0,2};
+			int[] opt2 = {2,0};
+			if(difs.equals(opt1)||difs.equals(opt2))
+					return true;
+			return false;
+			
+		}
+		
+		public boolean needsDoubleRotate(){
+			if(!needsRotate())
+				return false;
+			int[] difs = this.difs();
+			int[] opt1 = {0,2};
+			int[] opt2 = {2,0};
+			if(difs.equals(opt1)) {
+				int[] problem = {2,1};
+				if(this.leftSon.difs().equals(problem))
+					return true;
+			}
+			if(difs.equals(opt2)) {
+				int[] problem = {1,2};
+				if(this.rightSon.difs().equals(problem))
+					return true;
+			}
+			
+			return false;
+			
+		}
+		
+		
+		
 		
 		//              ****tree methods*****
 		

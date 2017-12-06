@@ -15,8 +15,8 @@ public class Test {
 		WAVLNode node2 = tree2.new WAVLNode(2,"two");
 		
 		tree2.test();
-		System.out.print(Arrays.toString(tree2.keysToArray()));
-		System.out.print(tree2.root.leftSon.rightSon.getKey());
+		System.out.print(Arrays.toString(tree2.infoToArray()));
+		System.out.print(tree2.root.leftSon.rightSon.predeccessor().getKey());
 		
 		
 		
