@@ -19,7 +19,7 @@ public class WAVLTree {
 		root.leftSon = new WAVLNode(3,"three");
 		root.leftSon.leftSon = new WAVLNode(2,"two");
 		root.leftSon.leftSon.leftSon = new WAVLNode(1,"one");
-		root.rightSon.rightSon = new WAVLNode(4,"four");
+		root.leftSon.rightSon = new WAVLNode(4,"four");
 		root.rightSon = new WAVLNode(8,"eight");
 		root.rightSon.leftSon = new WAVLNode(7,"seven");
 		root.rightSon.rightSon = new WAVLNode(9,"nine");
