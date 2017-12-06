@@ -116,7 +116,7 @@ public class WAVLTree {
 	 * precondition: none postcondition: none
 	 */
 	public int size() {
-		return 42; // to be replaced by student code
+		return root.getSubtreeSize(); 
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class WAVLTree {
 	 * precondition: none postcondition: none
 	 */
 	public IWAVLNode getRoot() {
-		return null;
+		return root;
 	}
 
 	/**
