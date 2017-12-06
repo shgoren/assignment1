@@ -85,9 +85,37 @@ public class WAVLTree {
 		while(curr!=null) {
 			if(curr.needsPromote()) {
 				promote(curr);
+				ops++;
+				curr = curr.getDad();
+				continue;
 			}
-				
-			
+			if(curr.needsRightRotate()) {
+				if(curr.needsDoubleRotateRight()) {
+					WAVLNode newCurr = doubleRotate(curr,curr.getLeft());
+					curr = newCurr.dad;
+					ops+=2;
+				}
+				else {
+					WAVLNode newCurr = rotate(curr,curr.getLeft());
+					curr = newCurr.dad;
+					ops++;
+					continue;
+				}
+			}
+			if(curr.needsLeftRotate()) {
+				if(curr.needsDoubleRotateLeft()) {
+					WAVLNode newCurr = doubleRotate(curr,curr.getRight());
+					curr = newCurr.dad;
+					ops+=2;
+					continue;
+				}
+				else {
+					WAVLNode newCurr = rotate(curr,curr.getRight());
+					curr = newCurr.dad;
+					ops++;
+					continue;
+				}
+			}
 			
 		}
 		return ops;
@@ -400,33 +428,44 @@ public class WAVLTree {
 			return false;
 		}
 		
-		public boolean needsRotate(){
+		public boolean needsRotate() {
+			return(needsRightRotate()||needsLeftRotate());
+		}
+		
+		public boolean needsRightRotate(){
 			int[] difs = this.difs();
 			int[] opt1 = {0,2};
-			int[] opt2 = {2,0};
-			if(difs.equals(opt1)||difs.equals(opt2))
+			if(difs.equals(opt1))
 					return true;
 			return false;
 			
 		}
 		
-		public boolean needsDoubleRotate(){
-			if(!needsRotate())
-				return false;
+		public boolean needsLeftRotate(){
 			int[] difs = this.difs();
-			int[] opt1 = {0,2};
 			int[] opt2 = {2,0};
-			if(difs.equals(opt1)) {
-				int[] problem = {2,1};
-				if(this.leftSon.difs().equals(problem))
+			if(difs.equals(opt2))
 					return true;
-			}
-			if(difs.equals(opt2)) {
-				int[] problem = {1,2};
-				if(this.rightSon.difs().equals(problem))
-					return true;
-			}
+			return false;
 			
+		}
+		
+		public boolean needsDoubleRotateRight(){
+			if(!needsRightRotate())
+				return false;
+			int[] problem = {2,1};
+			if(this.leftSon.difs().equals(problem))
+					return true;
+			return false;
+			
+		}
+		
+		public boolean needsDoubleRotateLeft(){
+			if(!needsLeftRotate())
+				return false;
+			int[] problem = {1,2};
+			if(this.rightSon.difs().equals(problem))
+					return true;
 			return false;
 			
 		}
