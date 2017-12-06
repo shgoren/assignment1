@@ -11,7 +11,7 @@ package wavl;
 
 public class WAVLTree {
 
-	private WAVLNode root;
+	private IWAVLNode root;
 
 	/**
 	 * public boolean empty()
@@ -20,8 +20,8 @@ public class WAVLTree {
 	 *
 	 */
 	
-	public WAVLTreew() {
-		root = new WAVLNode();
+	public WAVLTree() {
+		root = new WAVLVirtualNode();
 	}
 	
 	public WAVLTree(WAVLNode root) {
@@ -39,7 +39,7 @@ public class WAVLTree {
 	 * returns null
 	 */
 	public String search(int k) {
-		return root.search(k);
+		return searchRec(root, k);
 	}
 
 	/**
@@ -146,6 +146,8 @@ public class WAVLTree {
 	}
 
 	public WAVLNode successor(WAVLNode node) {
+		if(node.rightSon!=null)
+			return min(node.rightSon);
 		return null;
 	}
 	
@@ -198,56 +200,25 @@ public class WAVLTree {
 	 */
 	public class WAVLNode implements IWAVLNode {
 
-		private int key, rank, subSize;
+		private int key, rank = 0, subSize = 1;
 		private String val;
 		private IWAVLNode rightSon, leftSon, dad;
-		private boolean isReal;
 
-		// virtual root constructor
-		public WAVLNode() {
-			rank = -1;
-			isReal = false;
-			subSize = 0;
-			this.key = -1;
-			this.val = "";
-			dad = null;
-			rightSon = null;
-			leftSon = null;
-		}
-		// virtual leaf constructor
-		public WAVLNode(WAVLNode dad) {
-			rank = -1;
-			isReal = false;
-			subSize = 0;
-			this.key = -1;
-			this.val = "";
-			this.dad = dad;
-			rightSon = null;
-			leftSon = null;
-		}
-		
-		//real root constructor
+		// root constructor
 		public WAVLNode(int key, String val) {
-			rank = 0;
-			isReal = true;
-			subSize = 1;
 			this.key = key;
 			this.val = val;
-			dad = null;
-			rightSon = new WAVLNode(this);
-			leftSon = new WAVLNode(this);
+			rightSon = new WAVLVirtualNode(this);
+			leftSon = new WAVLVirtualNode(this);
 		}
 
-		//real leaf constructor
+		// leaf constructor
 		public WAVLNode(int key, String val, IWAVLNode dad) {
-			rank = 0;
-			isReal = true;
-			subSize = 1;
 			this.key = key;
 			this.val = val;
 			this.dad = dad;
-			rightSon = new WAVLNode(this);
-			leftSon = new WAVLNode(this);
+			rightSon = new WAVLVirtualNode(this);
+			leftSon = new WAVLVirtualNode(this);
 		}
 
 		public int getKey() {
@@ -278,11 +249,73 @@ public class WAVLTree {
 		// Returns True if this is a non-virtual WAVL node (i.e not a virtual leaf or a
 		// sentinal)
 		public boolean isRealNode() {
-			return isReal;
+			return true;
 		}
 
 		public int getSubtreeSize() {
 			return subSize;
+		}
+		public WAVLNode successor(WAVLNode node) {
+			if(node.rightSon!=null)
+				return min(node.rightSon);
+			WAVLNode curr = node.dad;
+			
+			
+		}
+		public WAVLNode min(WAVLNode node) {
+			return null; 
+		}
+	}
+
+	// virtual node, can be a root of an empty tree or a virtual child of a leaf
+	// contains pointer to dad
+	public class WAVLVirtualNode implements IWAVLNode {
+
+		private IWAVLNode dad;
+
+		// root constructor
+		public WAVLVirtualNode() {
+			dad = null;
+		}
+
+		// leaf constructor
+		public WAVLVirtualNode(IWAVLNode dad) {
+			this.dad = dad;
+		}
+
+		public int getKey() {
+			return -1;
+		}
+
+		public String getValue() {
+			return null;
+		}
+
+		public int getRank() {
+			return -1;
+		}
+
+		public IWAVLNode getLeft() {
+			return null;
+		}
+
+		public IWAVLNode getRight() {
+			return null;
+		}
+
+		// returns null if root
+		public IWAVLNode getDad() {
+			return dad;
+		}
+
+		// Returns True if this is a non-virtual WAVL node (i.e not a virtual leaf or a
+		// sentinal)
+		public boolean isRealNode() {
+			return false;
+		}
+
+		public int getSubtreeSize() {
+			return 0; // to be replaced by student code
 		}
 	}
 
