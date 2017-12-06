@@ -11,7 +11,7 @@ package wavl;
 
 public class WAVLTree {
 
-	private WAVLNode root;
+	public WAVLNode root;
 
 	/// inserts for test
 	public void test() {
@@ -19,10 +19,22 @@ public class WAVLTree {
 		root.leftSon = new WAVLNode(3,"three");
 		root.leftSon.leftSon = new WAVLNode(2,"two");
 		root.leftSon.leftSon.leftSon = new WAVLNode(1,"one");
-		root.rightSon.rightSon = new WAVLNode(4,"four");
+		root.leftSon.rightSon = new WAVLNode(4,"four");
 		root.rightSon = new WAVLNode(8,"eight");
 		root.rightSon.leftSon = new WAVLNode(7,"seven");
 		root.rightSon.rightSon = new WAVLNode(9,"nine");
+		root.treeSize = 8;
+		
+
+		
+		root.leftSon = root;
+		root.leftSon.leftSon.dad = root.leftSon;
+		root.leftSon.leftSon.leftSon.dad = root.leftSon.leftSon;
+		root.leftSon.rightSon.dad = root.leftSon;
+		root.rightSon.dad = root;
+		root.rightSon.leftSon.dad = root.rightSon;
+		root.rightSon.rightSon.dad = root.rightSon;
+		
 	}
 	
 	/**
@@ -106,10 +118,13 @@ public class WAVLTree {
 	 */
 	public int[] keysToArray() {
 		int[] arr = new int[root.getSubtreeSize()];
-		WAVLNode curr = root;
+		WAVLNode curr = root.minNode();
 		int i=0;
-		while(curr.isRealNode()){
-			
+		while(curr!=null && curr.isRealNode()){
+			arr[i]=curr.getKey();
+			WAVLNode temp = curr.successor();
+			curr = temp;
+			i++;
 		}
 		
 		return arr; 
@@ -216,16 +231,16 @@ public class WAVLTree {
 	 */
 	public class WAVLNode implements IWAVLNode {
 
-		private int key, rank, subSize;
-		private String val;
-		private WAVLNode rightSon, leftSon, dad;
-		private boolean isReal;
+		public int key, rank, treeSize;
+		public String val;
+		public WAVLNode rightSon, leftSon, dad;
+		public boolean isReal;
 
 		// virtual root constructor
 		public WAVLNode() {
 			rank = -1;
 			isReal = false;
-			subSize = 0;
+			treeSize = 0;
 			this.key = -1;
 			this.val = "";
 			dad = null;
@@ -237,7 +252,7 @@ public class WAVLTree {
 		public WAVLNode(WAVLNode dad) {
 			rank = -1;
 			isReal = false;
-			subSize = 0;
+			treeSize = 0;
 			this.key = -1;
 			this.val = "";
 			this.dad = dad;
@@ -249,7 +264,7 @@ public class WAVLTree {
 		public WAVLNode(int key, String val) {
 			rank = 0;
 			isReal = true;
-			subSize = 1;
+			treeSize = 1;
 			this.key = key;
 			this.val = val;
 			dad = null;
@@ -261,7 +276,7 @@ public class WAVLTree {
 		public WAVLNode(int key, String val, WAVLNode dad) {
 			rank = 0;
 			isReal = true;
-			subSize = 1;
+			treeSize = 1;
 			this.key = key;
 			this.val = val;
 			this.dad = dad;
@@ -303,10 +318,11 @@ public class WAVLTree {
 		public WAVLNode successor() {
 			if(rightSon.isRealNode())
 				return rightSon.minNode();
-			WAVLNode ans = getDad();
-			while(ans!=null && ans.getRight()==this) {
-				WAVLNode temp = ans.getDad();
-				ans = temp;
+			WAVLNode prev = this;
+			WAVLNode ans = prev.getDad();
+			while(ans!=null && ans.getRight()==prev) {
+				prev = ans;
+				ans = prev.getDad();
 			}
 			
 			return ans;
@@ -328,7 +344,7 @@ public class WAVLTree {
 		//              ****tree methods*****
 		
 		public int getSubtreeSize() {
-			return subSize;
+			return treeSize;
 		}
 		
 		// return null if not found

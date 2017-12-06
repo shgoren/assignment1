@@ -1,6 +1,8 @@
 package tests;
 
-import wavl.*;
+import java.util.Arrays;
+
+import wavl.WAVLTree;
 import wavl.WAVLTree.WAVLNode;
 
 public class Test {
@@ -15,6 +17,8 @@ public class Test {
 		tree2.test();
 		System.out.print(tree2.min());
 		System.out.print(tree2.max());
+		System.out.print(tree2.root.leftSon.leftSon.getDad().getKey());
+		System.out.print(Arrays.toString(tree2.keysToArray()));
 		
 	}
 	
