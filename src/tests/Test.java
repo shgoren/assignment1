@@ -52,6 +52,8 @@ public class Test {
 		
 		tree2.insert(4, "fdf");
 		
+		System.out.println(tree2.search(4));
+		
 		
 
 	}

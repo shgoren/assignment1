@@ -485,7 +485,7 @@ public class WAVLTree {
 			int[] difs = this.difs();
 			int[] opt1 = {1,0};
 			int[] opt2 = {0,1};
-			if(difs.equals(opt1)||difs.equals(opt2))
+			if(difs != null && (difs.equals(opt1) || difs.equals(opt2)) )
 					return true;
 			return false;
 		}
@@ -497,7 +497,7 @@ public class WAVLTree {
 		public boolean needsRightRotate(){
 			int[] difs = this.difs();
 			int[] opt1 = {0,2};
-			if(difs.equals(opt1))
+			if(difs != null && difs.equals(opt1))
 					return true;
 			return false;
 			
@@ -506,7 +506,7 @@ public class WAVLTree {
 		public boolean needsLeftRotate(){
 			int[] difs = this.difs();
 			int[] opt2 = {2,0};
-			if(difs.equals(opt2))
+			if ( (difs != null) && (difs.equals(opt2) ))
 					return true;
 			return false;
 			
