@@ -13,6 +13,18 @@ public class WAVLTree {
 
 	private WAVLNode root;
 
+	/// inserts for test
+	public void test() {
+		root = new WAVLNode(5,"five");
+		root.leftSon = new WAVLNode(3,"three");
+		root.leftSon.leftSon = new WAVLNode(2,"two");
+		root.leftSon.leftSon.leftSon = new WAVLNode(1,"one");
+		root.rightSon.rightSon = new WAVLNode(4,"four");
+		root.rightSon = new WAVLNode(8,"eight");
+		root.rightSon.leftSon = new WAVLNode(7,"seven");
+		root.rightSon.rightSon = new WAVLNode(9,"nine");
+	}
+	
 	/**
 	 * public boolean empty()
 	 *
@@ -83,7 +95,7 @@ public class WAVLTree {
 	 * tree is empty
 	 */
 	public String max() {
-		return "42"; // to be replaced by student code
+		return root.maxVal(); // to be replaced by student code
 	}
 
 	/**
@@ -132,7 +144,7 @@ public class WAVLTree {
 	 *
 	 * precondition: none postcondition: none
 	 */
-	public IWAVLNode getRoot() {
+	public WAVLNode getRoot() {
 		return null;
 	}
 
@@ -341,13 +353,22 @@ public class WAVLTree {
 		
 		
 		public WAVLNode minNode() {
-			if (leftSon == null)
+			if (!this.isRealNode() || !leftSon.isRealNode() )
 				return this;
 			return leftSon.minNode();
 		}
 		
 		public String minVal() {
-			return leftSon.minNode().getValue();
+			return this.minNode().getValue();
+		}		
+		public WAVLNode maxNode() {
+			if (!this.isRealNode() || !rightSon.isRealNode() )
+				return this;
+			return rightSon.minNode();
+		}
+		
+		public String maxVal() {
+			return this.maxNode().getValue();
 		}
 		
 		
