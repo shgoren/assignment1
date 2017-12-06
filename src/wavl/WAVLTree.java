@@ -28,16 +28,12 @@ public class WAVLTree {
 		root.treeSize = 10;
 		
 
-<<<<<<< HEAD
-
 		root.leftSon.dad = root.rightSon.dad = root;
 		root.leftSon.leftSon.dad = root.leftSon;
 		root.leftSon.leftSon.leftSon.dad = root.leftSon.leftSon;
 		root.leftSon.rightSon.leftSon.dad = root.leftSon.rightSon.rightSon.dad = root.leftSon.rightSon;
 		root.rightSon.rightSon.dad = root.rightSon.leftSon.dad = root.rightSon;
-=======
 		
->>>>>>> ran5
 	}
 	
 	/**

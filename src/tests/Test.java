@@ -14,7 +14,6 @@ public class Test {
 		WAVLNode node1 = tree1.new WAVLNode();
 		WAVLNode node2 = tree2.new WAVLNode(2,"two");
 		tree2.test();
-<<<<<<< HEAD
 
 		/*	
 		System.out.println(tree2.min());
@@ -50,11 +49,8 @@ public class Test {
 		System.out.println(tree2.root.rightSon.rightSon.getKey());
 		System.out.println(tree2.root.leftSon.leftSon.getKey());
 		
-=======
-		System.out.print(Arrays.toString(tree2.infoToArray()));
-		System.out.print(tree2.root.leftSon.rightSon.predeccessor().getKey());
->>>>>>> ran5
 		
+		tree2.insert(4, "fdf");
 		
 		
 
