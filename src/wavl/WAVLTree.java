@@ -23,6 +23,18 @@ public class WAVLTree {
 		root.rightSon = new WAVLNode(8,"eight");
 		root.rightSon.leftSon = new WAVLNode(7,"seven");
 		root.rightSon.rightSon = new WAVLNode(9,"nine");
+		root.treeSize = 8;
+		
+
+		
+		root.leftSon.dad = root;
+		root.leftSon.leftSon.dad = root.leftSon;
+		root.leftSon.leftSon.leftSon.dad = root.leftSon.leftSon;
+		root.leftSon.rightSon.dad = root.leftSon;
+		root.rightSon.dad = root;
+		root.rightSon.leftSon.dad = root.rightSon;
+		root.rightSon.rightSon.dad = root.rightSon;
+		
 	}
 	
 	/**
@@ -106,8 +118,17 @@ public class WAVLTree {
 	 * if the tree is empty.
 	 */
 	public int[] keysToArray() {
-		int[] arr = new int[42]; // to be replaced by student code
-		return arr; // to be replaced by student code
+		int[] arr = new int[root.getSubtreeSize()];
+		WAVLNode curr = root.minNode();
+		int i=0;
+		while(curr!=null && curr.isRealNode()){
+			arr[i]=curr.getKey();
+			WAVLNode temp = curr.successor();
+			curr = temp;
+			i++;
+		}
+		
+		return arr; 
 	}
 
 	/**
@@ -162,11 +183,11 @@ public class WAVLTree {
 	}
 
 	public WAVLNode successor(WAVLNode node) {
-		return null;
+		return node.successor();
 	}
 	
 	public WAVLNode predeccessor(WAVLNode node) {
-		return null;
+		return node.predeccessor();
 	}
 
 	public void rotate() {
@@ -216,10 +237,11 @@ public class WAVLTree {
 	 */
 	public class WAVLNode implements IWAVLNode {
 
-		private int key, rank, treeSize;
-		private String val;
-		private WAVLNode rightSon, leftSon, dad;
-		private boolean isReal;
+		public int key, rank, treeSize;
+		public String val;
+		public WAVLNode rightSon, leftSon, dad;
+		public boolean isReal;
+		
 
 		// virtual root constructor
 		public WAVLNode() {
@@ -299,7 +321,32 @@ public class WAVLTree {
 		public boolean isRealNode() {
 			return isReal;
 		}
-
+		
+		public WAVLNode successor() {
+			if(rightSon.isRealNode())
+				return rightSon.minNode();
+			WAVLNode prev = this;
+			WAVLNode ans = prev.getDad();
+			while(ans!=null && ans.getRight()==prev) {
+				prev = ans;
+				ans = prev.getDad();
+			}
+			
+			return ans;
+			
+		}
+		
+		public WAVLNode predeccessor() {
+			if(leftSon.isRealNode())
+				return leftSon.maxNode();
+			WAVLNode ans = getDad();
+			while(ans!=null && ans.getLeft()==this) {
+				WAVLNode temp = ans.getDad();
+				ans = temp;
+			}
+			
+			return ans;
+		}
 		
 		//              ****tree methods*****
 		
