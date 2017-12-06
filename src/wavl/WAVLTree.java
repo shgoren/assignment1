@@ -27,7 +27,7 @@ public class WAVLTree {
 		
 
 		
-		root.leftSon = root;
+		root.leftSon.dad = root;
 		root.leftSon.leftSon.dad = root.leftSon;
 		root.leftSon.leftSon.leftSon.dad = root.leftSon.leftSon;
 		root.leftSon.rightSon.dad = root.leftSon;
