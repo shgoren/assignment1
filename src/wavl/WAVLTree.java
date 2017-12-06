@@ -152,8 +152,18 @@ public class WAVLTree {
 	public WAVLNode predeccessor(WAVLNode node) {
 		return null;
 	}
+
+	public void rotate() {
+	}
 	
-	
+	public void doubleRotate() {
+	}
+
+	public void promote() {
+	}
+
+	public void demote() {
+	}
 
 	/**
 	 * public interface IWAVLNode ! Do not delete or modify this - otherwise all
