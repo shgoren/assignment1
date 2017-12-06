@@ -75,7 +75,8 @@ public class WAVLTree {
 	 * k already exists in the tree.
 	 */
 	public int insert(int k, String i) {
-		return 42; // to be replaced by student code
+		
+		return 42;
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class WAVLTree {
 	 * precondition: none postcondition: none
 	 */
 	public int size() {
-		return 42; // to be replaced by student code
+		return root.getSubtreeSize(); // to be replaced by student code
 	}
 
 	/**
@@ -160,7 +161,7 @@ public class WAVLTree {
 	 * precondition: none postcondition: none
 	 */
 	public WAVLNode getRoot() {
-		return null;
+		return root;
 	}
 
 	/**
@@ -175,7 +176,10 @@ public class WAVLTree {
 	 * precondition: size() >= i > 0 postcondition: none
 	 */
 	public String select(int i) {
-		return null;
+		WAVLNode current = root.minNode();
+		for (int j=1; j<i; j++)
+			current = successor(current);
+		return current.getValue();
 	}
 
 	public WAVLNode successor(WAVLNode node) {
@@ -192,10 +196,12 @@ public class WAVLTree {
 	public void doubleRotate() {
 	}
 
-	public void promote() {
+	public void promote(WAVLNode node) {
+		node.rank++;
 	}
 
-	public void demote() {
+	public void demote(WAVLNode node) {
+		node.rank--;
 	}
 
 	/**
@@ -231,10 +237,17 @@ public class WAVLTree {
 	 */
 	public class WAVLNode implements IWAVLNode {
 
+<<<<<<< HEAD
 		public int key, rank, treeSize;
 		public String val;
 		public WAVLNode rightSon, leftSon, dad;
 		public boolean isReal;
+=======
+		private int key, rank, treeSize;
+		private String val;
+		private WAVLNode rightSon, leftSon, dad;
+		private boolean isReal;
+>>>>>>> master
 
 		// virtual root constructor
 		public WAVLNode() {
@@ -349,9 +362,7 @@ public class WAVLTree {
 		
 		// return null if not found
 		public WAVLNode searchNode(int k) {
-			if (!isRealNode())
-				return null;
-			if (getKey() == k)
+			if (!isRealNode() || getKey() == k)
 				return this;
 			if (k < getKey())
 				return leftSon.searchNode(k);
@@ -362,7 +373,7 @@ public class WAVLTree {
 		// return null if not found
 		public String searchVal(int k) {
 			WAVLNode node = searchNode(k);
-			if (node == null)
+			if (!node.isRealNode())
 				return null;
 			return searchNode(k).getValue();
 		}
@@ -380,7 +391,7 @@ public class WAVLTree {
 		public WAVLNode maxNode() {
 			if (!this.isRealNode() || !rightSon.isRealNode() )
 				return this;
-			return rightSon.minNode();
+			return rightSon.maxNode();
 		}
 		
 		public String maxVal() {
