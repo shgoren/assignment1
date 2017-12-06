@@ -39,7 +39,7 @@ public class WAVLTree {
 	 * returns null
 	 */
 	public String search(int k) {
-		return root.search(k);
+		return root.searchVal(k);
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class WAVLTree {
 	 * the tree is empty
 	 */
 	public String min() {
-		return "42"; // to be replaced by student code
+		return root.minVal(); // to be replaced by student code
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class WAVLTree {
 
 		private int key, rank, subSize;
 		private String val;
-		private IWAVLNode rightSon, leftSon, dad;
+		private WAVLNode rightSon, leftSon, dad;
 		private boolean isReal;
 
 		// virtual root constructor
@@ -214,6 +214,7 @@ public class WAVLTree {
 			rightSon = null;
 			leftSon = null;
 		}
+		
 		// virtual leaf constructor
 		public WAVLNode(WAVLNode dad) {
 			rank = -1;
@@ -239,7 +240,7 @@ public class WAVLTree {
 		}
 
 		//real leaf constructor
-		public WAVLNode(int key, String val, IWAVLNode dad) {
+		public WAVLNode(int key, String val, WAVLNode dad) {
 			rank = 0;
 			isReal = true;
 			subSize = 1;
@@ -262,16 +263,16 @@ public class WAVLTree {
 			return rank;
 		}
 
-		public IWAVLNode getLeft() {
+		public WAVLNode getLeft() {
 			return leftSon;
 		}
 
-		public IWAVLNode getRight() {
+		public WAVLNode getRight() {
 			return rightSon;
 		}
 
 		// returns null if root
-		public IWAVLNode getDad() {
+		public WAVLNode getDad() {
 			return dad;
 		}
 
@@ -282,23 +283,43 @@ public class WAVLTree {
 		}
 
 		
-		// tree methods
+		//              ****tree methods*****
 		
 		public int getSubtreeSize() {
 			return subSize;
 		}
-
-		public WAVLNode nodeSearch(int k) {
+		
+		// return null if not found
+		public WAVLNode searchNode(int k) {
 			if (!isRealNode())
 				return null;
 			if (getKey() == k)
 				return this;
-			
+			if (k < getKey())
+				return leftSon.searchNode(k);
+			else
+				return rightSon.searchNode(k);
 		}
 		
-		public String valSearch(int k) {
-			return nodeSearch().getValue();
+		// return null if not found
+		public String searchVal(int k) {
+			WAVLNode node = searchNode(k);
+			if (node == null)
+				return null;
+			return searchNode(k).getValue();
 		}
+		
+		
+		public WAVLNode minNode() {
+			if (leftSon == null)
+				return this;
+			return leftSon.minNode();
+		}
+		
+		public String minVal() {
+			return leftSon.minNode().getValue();
+		}
+		
 		
 	}
 
