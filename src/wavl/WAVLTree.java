@@ -258,7 +258,7 @@ public class WAVLTree {
 		public IWAVLNode getDad(); // returns dad (if there is no dad return null)
 
 		public boolean isRealNode(); // Returns True if this is a non-virtual WAVL node (i.e not a virtual leaf or a
-										// sentinal)
+										// sentinel)
 
 		public int getSubtreeSize(); // Returns the number of real nodes in this node's subtree (Should be
 										// implemented in O(1))
@@ -290,6 +290,8 @@ public class WAVLTree {
 			rightSon = null;
 			leftSon = null;
 		}
+		
+		
 		
 		public void setRightSon(WAVLNode node) {
 			this.rightSon = node;
