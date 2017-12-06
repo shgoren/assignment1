@@ -19,8 +19,17 @@ public class WAVLTree {
 	 * returns true if and only if the tree is empty
 	 *
 	 */
+	
+	public WAVLTree() {
+		root = new WAVLVirtualNode();
+	}
+	
+	public WAVLTree(WAVLNode root) {
+		this.root = root;
+	}
+	
 	public boolean empty() {
-		return false; // to be replaced by student code
+		return !root.isRealNode();
 	}
 
 	/**
@@ -30,7 +39,7 @@ public class WAVLTree {
 	 * returns null
 	 */
 	public String search(int k) {
-		return "42"; // to be replaced by student code
+		return searchRec(root, k);
 	}
 
 	/**
@@ -135,6 +144,16 @@ public class WAVLTree {
 	public String select(int i) {
 		return null;
 	}
+
+	public WAVLNode successor(WAVLNode node) {
+		return null;
+	}
+	
+	public WAVLNode predeccessor(WAVLNode node) {
+		return null;
+	}
+	
+	
 
 	/**
 	 * public interface IWAVLNode ! Do not delete or modify this - otherwise all
