@@ -237,17 +237,11 @@ public class WAVLTree {
 	 */
 	public class WAVLNode implements IWAVLNode {
 
-<<<<<<< HEAD
 		public int key, rank, treeSize;
 		public String val;
 		public WAVLNode rightSon, leftSon, dad;
 		public boolean isReal;
-=======
-		private int key, rank, treeSize;
-		private String val;
-		private WAVLNode rightSon, leftSon, dad;
-		private boolean isReal;
->>>>>>> master
+		
 
 		// virtual root constructor
 		public WAVLNode() {
