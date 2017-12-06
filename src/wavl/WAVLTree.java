@@ -11,7 +11,7 @@ package wavl;
 
 public class WAVLTree {
 
-	private WAVLNode root;
+	public WAVLNode root;
 
 	/// inserts for test
 	public void test() {
@@ -63,7 +63,8 @@ public class WAVLTree {
 	 * k already exists in the tree.
 	 */
 	public int insert(int k, String i) {
-		return 42; // to be replaced by student code
+		
+		return 42;
 	}
 
 	/**
@@ -128,7 +129,7 @@ public class WAVLTree {
 	 * precondition: none postcondition: none
 	 */
 	public int size() {
-		return 42; // to be replaced by student code
+		return root.getSubtreeSize(); // to be replaced by student code
 	}
 
 	/**
@@ -139,7 +140,7 @@ public class WAVLTree {
 	 * precondition: none postcondition: none
 	 */
 	public WAVLNode getRoot() {
-		return null;
+		return root;
 	}
 
 	/**
@@ -154,7 +155,10 @@ public class WAVLTree {
 	 * precondition: size() >= i > 0 postcondition: none
 	 */
 	public String select(int i) {
-		return null;
+		WAVLNode current = root.minNode();
+		for (int j=1; j<i; j++)
+			current = successor(current);
+		return current.getValue();
 	}
 
 	public WAVLNode successor(WAVLNode node) {
@@ -171,10 +175,12 @@ public class WAVLTree {
 	public void doubleRotate() {
 	}
 
-	public void promote() {
+	public void promote(WAVLNode node) {
+		node.rank++;
 	}
 
-	public void demote() {
+	public void demote(WAVLNode node) {
+		node.rank--;
 	}
 
 	/**
@@ -210,7 +216,7 @@ public class WAVLTree {
 	 */
 	public class WAVLNode implements IWAVLNode {
 
-		private int key, rank, subSize;
+		private int key, rank, treeSize;
 		private String val;
 		private WAVLNode rightSon, leftSon, dad;
 		private boolean isReal;
@@ -219,7 +225,7 @@ public class WAVLTree {
 		public WAVLNode() {
 			rank = -1;
 			isReal = false;
-			subSize = 0;
+			treeSize = 0;
 			this.key = -1;
 			this.val = "";
 			dad = null;
@@ -231,7 +237,7 @@ public class WAVLTree {
 		public WAVLNode(WAVLNode dad) {
 			rank = -1;
 			isReal = false;
-			subSize = 0;
+			treeSize = 0;
 			this.key = -1;
 			this.val = "";
 			this.dad = dad;
@@ -243,7 +249,7 @@ public class WAVLTree {
 		public WAVLNode(int key, String val) {
 			rank = 0;
 			isReal = true;
-			subSize = 1;
+			treeSize = 1;
 			this.key = key;
 			this.val = val;
 			dad = null;
@@ -255,7 +261,7 @@ public class WAVLTree {
 		public WAVLNode(int key, String val, WAVLNode dad) {
 			rank = 0;
 			isReal = true;
-			subSize = 1;
+			treeSize = 1;
 			this.key = key;
 			this.val = val;
 			this.dad = dad;
@@ -298,14 +304,12 @@ public class WAVLTree {
 		//              ****tree methods*****
 		
 		public int getSubtreeSize() {
-			return subSize;
+			return treeSize;
 		}
 		
 		// return null if not found
 		public WAVLNode searchNode(int k) {
-			if (!isRealNode())
-				return null;
-			if (getKey() == k)
+			if (!isRealNode() || getKey() == k)
 				return this;
 			if (k < getKey())
 				return leftSon.searchNode(k);
@@ -316,7 +320,7 @@ public class WAVLTree {
 		// return null if not found
 		public String searchVal(int k) {
 			WAVLNode node = searchNode(k);
-			if (node == null)
+			if (!node.isRealNode())
 				return null;
 			return searchNode(k).getValue();
 		}
@@ -334,7 +338,7 @@ public class WAVLTree {
 		public WAVLNode maxNode() {
 			if (!this.isRealNode() || !rightSon.isRealNode() )
 				return this;
-			return rightSon.minNode();
+			return rightSon.maxNode();
 		}
 		
 		public String maxVal() {
