@@ -87,7 +87,7 @@ public class WAVLTree {
 	 * item with key k was not found in the tree.
 	 */
 	public int delete(int k) {
-		return 42; // to be replaced by student code
+		return 42;
 	}
 
 	/**
