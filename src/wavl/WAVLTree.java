@@ -259,6 +259,7 @@ public class WAVLTree {
 			if(node.rightSon!=null)
 				return min(node.rightSon);
 			WAVLNode curr = node.dad;
+			return null;
 			
 			
 		}
