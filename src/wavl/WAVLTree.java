@@ -24,7 +24,7 @@ public class WAVLTree {
 		root = new WAVLVirtualNode();
 	}
 	
-	public WAVLTree(WAVLNode root) {
+	public WAVLTree(IWAVLNode root) {
 		this.root = root;
 	}
 	
@@ -40,6 +40,11 @@ public class WAVLTree {
 	 */
 	public String search(int k) {
 		return searchRec(root, k);
+	}
+
+	private String searchRec(IWAVLNode node, int k) {
+		if (node.getKey() == k)
+			return null;
 	}
 
 	/**
