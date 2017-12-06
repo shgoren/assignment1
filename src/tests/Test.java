@@ -15,7 +15,7 @@ public class Test {
 		tree2.test();
 		System.out.println(tree2.min());
 		System.out.println(tree2.max());
-		System.out.println(tree2.search(4));
+		System.out.println(tree2.search(10));
 		
 	}
 	
