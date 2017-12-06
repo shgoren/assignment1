@@ -20,7 +20,7 @@ public class WAVLTree {
 	 *
 	 */
 	
-	public WAVLTreew() {
+	public WAVLTree() {
 		root = new WAVLNode();
 	}
 	
@@ -93,8 +93,14 @@ public class WAVLTree {
 	 * if the tree is empty.
 	 */
 	public int[] keysToArray() {
-		int[] arr = new int[42]; // to be replaced by student code
-		return arr; // to be replaced by student code
+		int[] arr = new int[root.getSubtreeSize()];
+		WAVLNode curr = root;
+		int i=0;
+		while(curr.isRealNode()){
+			
+		}
+		
+		return arr; 
 	}
 
 	/**
@@ -146,11 +152,11 @@ public class WAVLTree {
 	}
 
 	public WAVLNode successor(WAVLNode node) {
-		return null;
+		return node.successor();
 	}
 	
 	public WAVLNode predeccessor(WAVLNode node) {
-		return null;
+		return node.predeccessor();
 	}
 
 	public void rotate() {
@@ -281,7 +287,31 @@ public class WAVLTree {
 		public boolean isRealNode() {
 			return isReal;
 		}
-
+		
+		public WAVLNode successor() {
+			if(rightSon.isRealNode())
+				return rightSon.minNode();
+			WAVLNode ans = getDad();
+			while(ans!=null && ans.getRight()==this) {
+				WAVLNode temp = ans.getDad();
+				ans = temp;
+			}
+			
+			return ans;
+			
+		}
+		
+		public WAVLNode predeccessor() {
+			if(leftSon.isRealNode())
+				return leftSon.maxNode();
+			WAVLNode ans = getDad();
+			while(ans!=null && ans.getLeft()==this) {
+				WAVLNode temp = ans.getDad();
+				ans = temp;
+			}
+			
+			return ans;
+		}
 		
 		//              ****tree methods*****
 		
