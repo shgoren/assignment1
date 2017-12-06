@@ -15,26 +15,25 @@ public class WAVLTree {
 
 	/// inserts for test
 	public void test() {
-		root = new WAVLNode(5,"five");
-		root.leftSon = new WAVLNode(3,"three");
-		root.leftSon.leftSon = new WAVLNode(2,"two");
-		root.leftSon.leftSon.leftSon = new WAVLNode(1,"one");
-		root.leftSon.rightSon = new WAVLNode(4,"four");
-		root.rightSon = new WAVLNode(8,"eight");
-		root.rightSon.leftSon = new WAVLNode(7,"seven");
-		root.rightSon.rightSon = new WAVLNode(9,"nine");
-		root.treeSize = 8;
+		root = new WAVLNode(10,"ten");
+		root.leftSon = new WAVLNode(5,"five");
+		root.leftSon.leftSon = new WAVLNode(1,"one");
+		root.leftSon.leftSon.leftSon = new WAVLNode(0,"zero");
+		root.leftSon.rightSon = new WAVLNode(8,"eight");
+		root.leftSon.rightSon.leftSon = new WAVLNode(7,"seven");
+		root.leftSon.rightSon.rightSon = new WAVLNode(9,"nine");
+		root.rightSon = new WAVLNode(15,"fifteen");
+		root.rightSon.leftSon = new WAVLNode(13,"thirteen");
+		root.rightSon.rightSon = new WAVLNode(19,"nineteen");
+		root.treeSize = 10;
 		
 
-		
-		root.leftSon.dad = root;
+
+		root.leftSon.dad = root.rightSon.dad = root;
 		root.leftSon.leftSon.dad = root.leftSon;
 		root.leftSon.leftSon.leftSon.dad = root.leftSon.leftSon;
-		root.leftSon.rightSon.dad = root.leftSon;
-		root.rightSon.dad = root;
-		root.rightSon.leftSon.dad = root.rightSon;
-		root.rightSon.rightSon.dad = root.rightSon;
-		
+		root.leftSon.rightSon.leftSon.dad = root.leftSon.rightSon.rightSon.dad = root.leftSon.rightSon;
+		root.rightSon.rightSon.dad = root.rightSon.leftSon.dad = root.rightSon;
 	}
 	
 	/**
@@ -189,11 +188,48 @@ public class WAVLTree {
 	public WAVLNode predeccessor(WAVLNode node) {
 		return node.predeccessor();
 	}
+	// returns the root of the new root of the rotate
+	public WAVLNode rotate(WAVLNode father, WAVLNode troubleMakerSon) {
+		WAVLNode temp, grandpa = father.getDad();
+		if (father.leftSon == troubleMakerSon) {
+			// right rotate
+			temp = troubleMakerSon.rightSon;
+			troubleMakerSon.setRightSon(father);
+			father.setLeftSon(temp);
+		}
+		else {
+			// left rotate
+			temp = troubleMakerSon.leftSon;
+			troubleMakerSon.setLeftSon(father);
+			father.setRightSon(temp);
+		}
+		troubleMakerSon.dad = grandpa;
+		if (root == father)
+			root = troubleMakerSon;
+		else if(grandpa.leftSon == father)
+			grandpa.setLeftSon(troubleMakerSon);
+		else
+			grandpa.setRightSon(troubleMakerSon);
+		
+		demote(father);
+		troubleMakerSon.updateSize();
+		father.updateSize();
+		
+		return troubleMakerSon;
+	}	
 
-	public void rotate() {
-	}
-	
-	public void doubleRotate() {
+	// returns the root of the new root of the rotate
+	public WAVLNode doubleRotate(WAVLNode father, WAVLNode son) {
+		WAVLNode holySpirit;
+		if (father.leftSon == son)
+			holySpirit = son.rightSon;
+		else
+			holySpirit = son.leftSon;
+		rotate(son, holySpirit);
+		rotate(father, holySpirit);	
+		
+		promote(holySpirit);
+		return holySpirit;
 	}
 
 	public void promote(WAVLNode node) {
@@ -255,6 +291,22 @@ public class WAVLTree {
 			leftSon = null;
 		}
 		
+		public void setRightSon(WAVLNode node) {
+			this.rightSon = node;
+			node.dad = this;
+		}
+
+		public void setLeftSon(WAVLNode node) {
+			this.leftSon = node;
+			node.dad = this;
+			
+		}
+
+		public void updateSize() {
+			treeSize = leftSon.treeSize + rightSon.treeSize +1;
+		}
+		
+
 		// virtual leaf constructor
 		public WAVLNode(WAVLNode dad) {
 			rank = -1;
@@ -371,7 +423,6 @@ public class WAVLTree {
 				return null;
 			return searchNode(k).getValue();
 		}
-		
 		
 		public WAVLNode minNode() {
 			if (!this.isRealNode() || !leftSon.isRealNode() )
