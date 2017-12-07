@@ -1,5 +1,7 @@
 package wavl;
 
+import java.util.Arrays;
+
 /**
  * Ran Armony & Shahaf Goren
  *
@@ -77,12 +79,9 @@ public class WAVLTree {
 		WAVLNode place = root.searchNode(k);
 		if(place.isRealNode())
 			return -1;
-		WAVLNode nodeDad = root.searchNode(k);
-		WAVLNode node  = new WAVLNode(k,i,nodeDad);
-		if(node.getKey()>nodeDad.getKey())
-			nodeDad.rightSon = node;
-		nodeDad.leftSon = node;
-		int ops = reBalance(node);	
+		WAVLNode node  = new WAVLNode(k,i);
+		place.replace(node);
+		int ops = reBalance(node);
 		return ops;
 	}
 	
@@ -90,6 +89,7 @@ public class WAVLTree {
 		int ops = 0;
 		WAVLNode curr = node.dad;
 		while(curr!=null) {
+			curr.treeSize++;
 			if(curr.needsPromote()) {
 				promote(curr);
 				ops++;
@@ -101,6 +101,7 @@ public class WAVLTree {
 					WAVLNode newCurr = doubleRotate(curr,curr.getLeft());
 					curr = newCurr.dad;
 					ops+=2;
+					continue;
 				}
 				else {
 					WAVLNode newCurr = rotate(curr,curr.getLeft());
@@ -123,6 +124,8 @@ public class WAVLTree {
 					continue;
 				}
 			}
+			curr = curr.dad;
+			
 			
 		}
 		return ops;
@@ -271,8 +274,8 @@ public class WAVLTree {
 			grandpa.setRightSon(troubleMakerSon);
 		
 		demote(father);
-		troubleMakerSon.updateSize();
 		father.updateSize();
+		troubleMakerSon.updateSize();
 		
 		return troubleMakerSon;
 	}	
@@ -352,6 +355,26 @@ public class WAVLTree {
 		
 		
 		
+		public void replace(WAVLNode node) {
+			if (this.dad == null) {
+				root = node;
+				return;
+			}
+			if(this.isLeftSon())
+				this.dad.setLeftSon(node);
+			else
+				this.dad.setRightSon(node);
+			
+		}
+
+
+
+		private boolean isLeftSon() {
+			return (this.dad.leftSon == this);
+		}
+
+
+
 		public void setRightSon(WAVLNode node) {
 			this.rightSon = node;
 			node.dad = this;
@@ -476,7 +499,7 @@ public class WAVLTree {
 			int[] opt1 = {1,2};
 			int[] opt2 = {1,1};
 			int[] opt3 = {2,1};
-			if(difs.equals(opt1)||difs.equals(opt2)||difs.equals(opt3))
+			if( Arrays.equals(difs,(opt1)) || Arrays.equals(difs,(opt2)) || Arrays.equals(difs,(opt3)) )
 					return true;
 			return false;
 		}
@@ -485,7 +508,7 @@ public class WAVLTree {
 			int[] difs = this.difs();
 			int[] opt1 = {1,0};
 			int[] opt2 = {0,1};
-			if(difs != null && (difs.equals(opt1) || difs.equals(opt2)) )
+			if(difs != null && (Arrays.equals(difs, opt1) || Arrays.equals(difs, opt2)) )
 					return true;
 			return false;
 		}
@@ -497,7 +520,7 @@ public class WAVLTree {
 		public boolean needsRightRotate(){
 			int[] difs = this.difs();
 			int[] opt1 = {0,2};
-			if(difs != null && difs.equals(opt1))
+			if(difs != null && ( Arrays.equals(difs, opt1) ))
 					return true;
 			return false;
 			
@@ -506,7 +529,7 @@ public class WAVLTree {
 		public boolean needsLeftRotate(){
 			int[] difs = this.difs();
 			int[] opt2 = {2,0};
-			if ( (difs != null) && (difs.equals(opt2) ))
+			if ( (difs != null) && (Arrays.equals(difs, opt2) ) )
 					return true;
 			return false;
 			
@@ -516,7 +539,7 @@ public class WAVLTree {
 			if(!needsRightRotate())
 				return false;
 			int[] problem = {2,1};
-			if(this.leftSon.difs().equals(problem))
+			if((Arrays.equals(this.leftSon.difs(),(problem) )))
 					return true;
 			return false;
 			
@@ -526,7 +549,7 @@ public class WAVLTree {
 			if(!needsLeftRotate())
 				return false;
 			int[] problem = {1,2};
-			if(this.rightSon.difs().equals(problem))
+			if(Arrays.equals(this.rightSon.difs(),(problem)))
 					return true;
 			return false;
 			

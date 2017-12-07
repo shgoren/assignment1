@@ -11,9 +11,9 @@ public class Test {
 
 		WAVLTree tree1 = new WAVLTree();
 		WAVLTree tree2 = new WAVLTree();
-		WAVLNode node1 = tree1.new WAVLNode();
-		WAVLNode node2 = tree2.new WAVLNode(2,"two");
-		tree2.test();
+		//WAVLNode node1 = tree1.new WAVLNode();
+		//WAVLNode node2 = tree2.new WAVLNode(2,"two");
+		//tree2.test();
 
 		/*	
 		System.out.println(tree2.min());
@@ -38,7 +38,7 @@ public class Test {
 		System.out.println(tree2.root.leftSon.rightSon.getKey());
 		
 		*/
-
+/*
 		System.out.println("double trouble");
 		tree2.doubleRotate(tree2.getRoot(), tree2.getRoot().leftSon);
 		System.out.println(tree2.root.getKey());
@@ -48,11 +48,25 @@ public class Test {
 		System.out.println(tree2.root.rightSon.leftSon.getKey());
 		System.out.println(tree2.root.rightSon.rightSon.getKey());
 		System.out.println(tree2.root.leftSon.leftSon.getKey());
-		
-		
-		tree2.insert(4, "fdf");
-		
+	*/	
+
+		tree2.insert(1, "1");
+		System.out.println(tree2.search(1));
+		tree2.insert(2, "2");
+		System.out.println(tree2.search(2));
+		tree2.insert(3, "3");
+		System.out.println(tree2.search(3));
+		tree2.insert(4, "4");
 		System.out.println(tree2.search(4));
+		tree2.insert(5, "5");
+		System.out.println(tree2.search(5));
+		tree2.insert(6, "6");
+		System.out.println(tree2.search(6));
+		tree2.insert(7, "7");
+		System.out.println(tree2.search(7));
+		
+		System.out.println(tree2.root.getRank());
+		
 		
 		
 
