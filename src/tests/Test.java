@@ -81,6 +81,7 @@ public class Test {
 		tree2.delete(6);		
 		TreePrinter.printNode(tree2.root);
 =======
+>>>>>>> master
 		for(int i=1; i<=10; i++) {
 			for(int j=1; j<=i*10000;j++) {
 				currOps = tree2.insert(j,""+j);
