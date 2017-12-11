@@ -2,6 +2,8 @@ package wavl;
 
 import java.util.Arrays;
 
+import com.sun.org.apache.xpath.internal.axes.NodeSequence;
+
 /**
  * Ran Armony & Shahaf Goren
  *
@@ -83,7 +85,7 @@ public class WAVLTree {
 		if(place.isRealNode())
 			return -1;
 		node = new WAVLNode(k,i);
-		place.replace(node);
+		place.insertInPlace(node);
 		ops = reBalance(node);
 		return ops;
 	}
@@ -145,7 +147,8 @@ public class WAVLTree {
 	public int delete(int k) {
 		int ops = 0;
 		WAVLNode place = root.searchNode(k),
-				 successor;
+				 successor,
+				 fatherOfDelted;
 		//if not found
 		if(!place.isRealNode())
 			return -1;
@@ -154,18 +157,14 @@ public class WAVLTree {
 			successor = place.successor();
 			place.replace(successor);
 		}
-		if(place.getRank() != 0)
-			if(place.isLeftSon())
-				if(place.leftSon.isRealNode())
-					place.dad.setLeftSon(place.leftSon);
-				else
-					place.dad.setLeftSon(place.rightSon);
-			else
-				if(place.rightSon.isRealNode())
-					place.dad.setRightSon(place.leftSon);
-				else
-					place.dad.setRightSon(place.rightSon);
-		return 42;
+		fatherOfDelted = place.dad;
+		
+		if(place.getRank() != 0) // is an unary node
+			place.deleteUnary();
+		else // a leaf
+			place.deleteLeaf();
+		// ops = reBalance(fatherOfDelted);
+		return ops;
 	}
 
 	/**
@@ -377,7 +376,7 @@ public class WAVLTree {
 			rightSon = null;
 			leftSon = null;
 		}
-		
+
 		// virtual leaf constructor
 		public WAVLNode(WAVLNode dad) {
 			rank = -1;
@@ -425,31 +424,92 @@ public class WAVLTree {
 					 nodeFather = node.dad,
 					 nodeLeftChild = node.leftSon,
 					 nodeRightChild = node.rightSon;
-			node.setLeftSon(this.leftSon);
-			node.setRightSon(this.rightSon);
-			this.setLeftSon(nodeLeftChild);
-			this.setRightSon(nodeRightChild);
+			boolean thisIsRoot =false,
+					nodeIsRoot = false;
+			int temp = 0;
+			boolean nodeWasLeftSon;
 			
-			if (thisFather == null) {
-				root = node;
-				return;
-			}
-			
-			if(this.isLeftSon())
-				thisFather.setLeftSon(node);
-			else
-				thisFather.setRightSon(node);
-			
-			//
-			if (nodeFather != null)
-				if(node.isLeftSon())
+			// replacing two real nodes
+			if(this.isRealNode() && node.isRealNode()) {
+				//replace fields
+				temp = node.getRank();
+				node.rank = this.rank;
+				this.rank = temp;
+				
+				temp = node.getSubtreeSize();
+				node.treeSize = this.treeSize;
+				this.treeSize = temp;
+
+				// replace place children
+				node.setLeftSon(this.leftSon);
+				node.setRightSon(this.rightSon);
+				this.setLeftSon(nodeLeftChild);
+				this.setRightSon(nodeRightChild);
+				
+				//replace fathers
+				nodeWasLeftSon = node.isLeftSon();
+				if (thisFather == null) {
+					root = node;
+					node.dad = null;
+				}
+				else if(this.isLeftSon())
+					thisFather.setLeftSon(node);
+				else
+					thisFather.setRightSon(node);
+
+
+				if (nodeFather == null) {
+					root = this;
+					this.dad = null;
+				} else if(nodeWasLeftSon)
 					nodeFather.setLeftSon(this);
 				else
 					nodeFather.setRightSon(this);
-				
+			}				
 		}
 
-
+		public void deleteUnary() {
+			if(this.dad == null) {
+				if(leftSon.isRealNode()) {
+					root = this.leftSon;
+					this.leftSon.dad = null;
+					}
+				else {
+					root = this.rightSon;
+					this.rightSon.dad = null;
+				}
+			}
+			else if(this.isLeftSon())
+				if(this.leftSon.isRealNode())
+					this.dad.setLeftSon(this.leftSon);
+				else
+					this.dad.setLeftSon(this.rightSon);
+			else
+				if(this.leftSon.isRealNode())
+					this.dad.setRightSon(this.leftSon);
+				else
+					this.dad.setRightSon(this.rightSon);
+		}
+		
+		public void deleteLeaf() {
+			if(this.dad == null)
+				root = new WAVLNode();
+			else if(this.isLeftSon())
+				this.dad.setLeftSon(new WAVLNode());
+			else
+				this.dad.setRightSon(new WAVLNode());
+		}
+		
+		private void insertInPlace(WAVLNode node) {
+			if(this.dad == null) {
+				root = node;
+				node.dad = null;
+			}
+			else if(this.isLeftSon())
+				this.dad.setLeftSon(node);
+			else
+				this.dad.setRightSon(node);
+		}
 
 		private boolean isLeftSon() {
 			return (this.dad.leftSon == this);
@@ -459,14 +519,12 @@ public class WAVLTree {
 
 		public void setRightSon(WAVLNode node) {
 			this.rightSon = node;
-			if (node.dad != null)
-				node.dad = this;
+			node.dad = this;
 		}
 
 		public void setLeftSon(WAVLNode node) {
 			this.leftSon = node;
-			if (node.dad != null)
-				node.dad = this;
+			node.dad = this;
 			
 		}
 
