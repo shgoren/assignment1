@@ -84,15 +84,15 @@ public class WAVLTree {
 			return -1;
 		node = new WAVLNode(k,i);
 		place.replace(node);
-		ops = reBalance(node);
+		ops = reBalance(node, "insert");
 		return ops;
 	}
 	
-	public int reBalance(WAVLNode node) {
+	public int reBalance(WAVLNode node, String state) {
 		int ops = 0;
 		WAVLNode curr = node.dad;
 		while(curr!=null) {
-			curr.treeSize++;
+			changeSize(curr, state);
 			if(curr.needsPromote()) {
 				promote(curr);
 				ops++;
@@ -101,14 +101,6 @@ public class WAVLTree {
 			}
 			
 			if(curr.needsDemote()) {
-				if(curr.getRight().needsDemote()) {
-					demote(curr.getRight());
-					ops++;
-				}
-				if(curr.getLeft().needsDemote()) {
-					demote(curr.getLeft());
-					ops++;
-				}
 				demote(curr);
 				ops++;
 				continue;
@@ -118,6 +110,11 @@ public class WAVLTree {
 				if(curr.needsDoubleRotateRight()) {
 					WAVLNode newCurr = doubleRotate(curr,curr.getLeft());
 					curr = newCurr.dad;
+					ops+=2;
+					continue;
+				}
+				if(curr.needsDoubleDemoteRight()) {
+					doubleDemoteRight(curr);
 					ops+=2;
 					continue;
 				}
@@ -135,6 +132,11 @@ public class WAVLTree {
 					ops+=2;
 					continue;
 				}
+				if(curr.needsDoubleDemoteLeft()) {
+					doubleDemoteLeft(curr);
+					ops+=2;
+					continue;
+				}
 				else {
 					WAVLNode newCurr = rotate(curr,curr.getRight());
 					curr = newCurr.dad;
@@ -147,6 +149,12 @@ public class WAVLTree {
 			
 		}
 		return ops;
+	}
+	
+	public void changeSize(WAVLNode node, String state) {
+		if(state.equals("delete"))
+			node.treeSize--;
+		node.treeSize++;
 	}
 
 	/**
@@ -180,7 +188,7 @@ public class WAVLTree {
 					place.dad.setRightSon(place.leftSon);
 				else
 					place.dad.setRightSon(place.rightSon);
-		ops = reBalance(place.dad);
+		ops = reBalance(place.dad, "delete");
 		return ops;
 	}
 
@@ -343,8 +351,13 @@ public class WAVLTree {
 		node.rank--;
 	}
 	
-	public void doubleDemote(WAVLNode node) {
-		
+	public void doubleDemoteRight(WAVLNode node) {
+		node.getRight().rank++;
+		node.rank--;
+	}
+	
+	public void doubleDemoteLeft(WAVLNode node) {
+		node.getLeft().rank++;
 		node.rank--;
 	}
 
@@ -636,24 +649,22 @@ public class WAVLTree {
 		}
 		//not in use
 		public boolean needsDoubleDemoteRight(){
-			if(!this.needsDemote())
+			if(!this.needsRightRotate())
 				return false;
 			int[] problem = {2,2};
 			int[] rightSonDifs = this.getRight().difs();
-			int[] leftSonDifs = this.getLeft().difs();
-			if(Arrays.equals(rightSonDifs, problem) || Arrays.equals(leftSonDifs, problem))
+			if(Arrays.equals(rightSonDifs, problem))
 				return true;
 			return false;
 				
 		}
 		//not in use
 		public boolean needsDoubleDemoteLeft(){
-			if(!this.needsDemote())
+			if(!this.needsLeftRotate())
 				return false;
 			int[] problem = {2,2};
-			int[] rightSonDifs = this.getRight().difs();
 			int[] leftSonDifs = this.getLeft().difs();
-			if(Arrays.equals(rightSonDifs, problem) || Arrays.equals(leftSonDifs, problem))
+			if(Arrays.equals(leftSonDifs, problem))
 				return true;
 			return false;
 				
