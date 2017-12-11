@@ -99,6 +99,21 @@ public class WAVLTree {
 				curr = curr.getDad();
 				continue;
 			}
+			
+			if(curr.needsDemote()) {
+				if(curr.getRight().needsDemote()) {
+					demote(curr.getRight());
+					ops++;
+				}
+				if(curr.getLeft().needsDemote()) {
+					demote(curr.getLeft());
+					ops++;
+				}
+				demote(curr);
+				ops++;
+				continue;
+					
+			}
 			if(curr.needsRightRotate()) {
 				if(curr.needsDoubleRotateRight()) {
 					WAVLNode newCurr = doubleRotate(curr,curr.getLeft());
@@ -165,7 +180,8 @@ public class WAVLTree {
 					place.dad.setRightSon(place.leftSon);
 				else
 					place.dad.setRightSon(place.rightSon);
-		return 42;
+		ops = reBalance(place.dad);
+		return ops;
 	}
 
 	/**
@@ -324,6 +340,11 @@ public class WAVLTree {
 	}
 
 	public void demote(WAVLNode node) {
+		node.rank--;
+	}
+	
+	public void doubleDemote(WAVLNode node) {
+		
 		node.rank--;
 	}
 
@@ -546,7 +567,8 @@ public class WAVLTree {
 			int[] opt1 = {1,2};
 			int[] opt2 = {1,1};
 			int[] opt3 = {2,1};
-			if( Arrays.equals(difs,(opt1)) || Arrays.equals(difs,(opt2)) || Arrays.equals(difs,(opt3)) )
+			int[] opt4 = {2,2};
+			if( Arrays.equals(difs,(opt1)) || Arrays.equals(difs,(opt2)) || Arrays.equals(difs,(opt3)) || Arrays.equals(difs,(opt4)) )
 					return true;
 			return false;
 		}
@@ -567,7 +589,8 @@ public class WAVLTree {
 		public boolean needsRightRotate(){
 			int[] difs = this.difs();
 			int[] opt1 = {0,2};
-			if(difs != null && ( Arrays.equals(difs, opt1) ))
+			int[] opt2 = {1,3};
+			if(difs != null && (Arrays.equals(difs, opt1)||Arrays.equals(difs, opt2) ))
 					return true;
 			return false;
 			
@@ -575,8 +598,9 @@ public class WAVLTree {
 		
 		public boolean needsLeftRotate(){
 			int[] difs = this.difs();
-			int[] opt2 = {2,0};
-			if ( (difs != null) && (Arrays.equals(difs, opt2) ) )
+			int[] opt1 = {2,0};
+			int[] opt2 = {3,1};
+			if(difs != null && (Arrays.equals(difs, opt1)||Arrays.equals(difs, opt2) ))
 					return true;
 			return false;
 			
@@ -600,6 +624,39 @@ public class WAVLTree {
 					return true;
 			return false;
 			
+		}
+		
+		public boolean needsDemote(){
+			int[] difs = this.difs();
+			int[] opt1 = {3,2};
+			int[] opt2 = {2,3};
+			if(difs != null && (Arrays.equals(difs, opt1) || Arrays.equals(difs, opt2)) )
+					return true;
+			return false;
+		}
+		//not in use
+		public boolean needsDoubleDemoteRight(){
+			if(!this.needsDemote())
+				return false;
+			int[] problem = {2,2};
+			int[] rightSonDifs = this.getRight().difs();
+			int[] leftSonDifs = this.getLeft().difs();
+			if(Arrays.equals(rightSonDifs, problem) || Arrays.equals(leftSonDifs, problem))
+				return true;
+			return false;
+				
+		}
+		//not in use
+		public boolean needsDoubleDemoteLeft(){
+			if(!this.needsDemote())
+				return false;
+			int[] problem = {2,2};
+			int[] rightSonDifs = this.getRight().difs();
+			int[] leftSonDifs = this.getLeft().difs();
+			if(Arrays.equals(rightSonDifs, problem) || Arrays.equals(leftSonDifs, problem))
+				return true;
+			return false;
+				
 		}
 		
 		
