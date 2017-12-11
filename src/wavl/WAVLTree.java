@@ -636,7 +636,6 @@ public class WAVLTree {
 			int[] opt1 = {1,2};
 			int[] opt2 = {1,1};
 			int[] opt3 = {2,1};
-			if( Arrays.equals(difs,(opt1)) || Arrays.equals(difs,(opt2)) || Arrays.equals(difs,(opt3)) )
 			int[] opt4 = {2,2};
 			if( Arrays.equals(difs,(opt1)) || Arrays.equals(difs,(opt2)) || Arrays.equals(difs,(opt3)) || Arrays.equals(difs,(opt4)) )
 					return true;
@@ -659,7 +658,6 @@ public class WAVLTree {
 		public boolean needsRightRotate(){
 			int[] difs = this.difs();
 			int[] opt1 = {0,2};
-			if(difs != null && ( Arrays.equals(difs, opt1) ))
 			int[] opt2 = {1,3};
 			if(difs != null && (Arrays.equals(difs, opt1)||Arrays.equals(difs, opt2) ))
 					return true;
@@ -669,8 +667,6 @@ public class WAVLTree {
 		
 		public boolean needsLeftRotate(){
 			int[] difs = this.difs();
-			int[] opt2 = {2,0};
-			if ( (difs != null) && (Arrays.equals(difs, opt2) ) )
 			int[] opt1 = {2,0};
 			int[] opt2 = {3,1};
 			if(difs != null && (Arrays.equals(difs, opt1)||Arrays.equals(difs, opt2) ))
