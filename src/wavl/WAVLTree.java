@@ -85,14 +85,14 @@ public class WAVLTree {
 		if(place.isRealNode())
 			return -1;
 		node = new WAVLNode(k,i);
-		place.replace(node);
-		ops = reBalance(node, "insert");
+		place.insertInPlace(node);
+		ops = reBalance(node.dad, "insert");
 		return ops;
 	}
 	
 	public int reBalance(WAVLNode node, String state) {
 		int ops = 0;
-		WAVLNode curr = node.dad;
+		WAVLNode curr = node;
 		while(curr!=null) {
 			changeSize(curr, state);
 			if(curr.needsPromote()) {
