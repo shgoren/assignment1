@@ -13,31 +13,8 @@ import java.util.Arrays;
  */
 
 public class WAVLTree {
-
+	
 	public WAVLNode root;
-
-	/// inserts for test
-	public void test() {
-		root = new WAVLNode(10,"ten");
-		root.leftSon = new WAVLNode(5,"five");
-		root.leftSon.leftSon = new WAVLNode(1,"one");
-		root.leftSon.leftSon.leftSon = new WAVLNode(0,"zero");
-		root.leftSon.rightSon = new WAVLNode(8,"eight");
-		root.leftSon.rightSon.leftSon = new WAVLNode(7,"seven");
-		root.leftSon.rightSon.rightSon = new WAVLNode(9,"nine");
-		root.rightSon = new WAVLNode(15,"fifteen");
-		root.rightSon.leftSon = new WAVLNode(13,"thirteen");
-		root.rightSon.rightSon = new WAVLNode(19,"nineteen");
-		root.treeSize = 10;
-		
-
-		root.leftSon.dad = root.rightSon.dad = root;
-		root.leftSon.leftSon.dad = root.leftSon;
-		root.leftSon.leftSon.leftSon.dad = root.leftSon.leftSon;
-		root.leftSon.rightSon.leftSon.dad = root.leftSon.rightSon.rightSon.dad = root.leftSon.rightSon;
-		root.rightSon.rightSon.dad = root.rightSon.leftSon.dad = root.rightSon;
-		
-	}
 	
 	/**
 	 * public boolean empty()
@@ -45,15 +22,12 @@ public class WAVLTree {
 	 * returns true if and only if the tree is empty
 	 *
 	 */
-	
 	public WAVLTree() {
 		root = new WAVLNode();
 	}
 	
-	public WAVLTree(WAVLNode root) {
-		this.root = root;
-	}
-	
+	//@ret true iff tree is empty (root is virtual)
+	//O(1)
 	public boolean empty() {
 		return !root.isRealNode();
 	}
@@ -63,6 +37,7 @@ public class WAVLTree {
 	 *
 	 * returns the info of an item with key k if it exists in the tree otherwise,
 	 * returns null
+	 * O(logn)
 	 */
 	public String search(int k) {
 		return root.searchVal(k);
@@ -75,6 +50,7 @@ public class WAVLTree {
 	 * valid (keep its invariants). returns the number of rebalancing operations, or
 	 * 0 if no rebalancing operations were necessary. returns -1 if an item with key
 	 * k already exists in the tree.
+	 * O(logn)
 	 */
 	public int insert(int k, String i) {
 		int ops = 0;
@@ -88,7 +64,12 @@ public class WAVLTree {
 		ops = reBalance(node.dad, "insert");
 		return ops;
 	}
-	
+	/**
+	 * check if the tree is balanced from the node given all the way up and adjusts the ranks and subtree sizes
+	 * @param node the node to start the rebalance from
+	 * @param state == "delete" || "increse" 
+	 * @return
+	 */
 	public int reBalance(WAVLNode node, String state) {
 		int ops = 0;
 		WAVLNode curr = node;
@@ -154,7 +135,12 @@ public class WAVLTree {
 		}
 		return ops;
 	}
-	
+	/**
+	 * increase or decrease size according to state
+	 * @param node
+	 * @param state == "delete" || "increse"
+	 * O(1)
+	 */
 	public void changeSize(WAVLNode node, String state) {
 		if(state.equals("delete"))
 			node.treeSize--;
@@ -169,12 +155,13 @@ public class WAVLTree {
 	 * must remain valid (keep its invariants). returns the number of rebalancing
 	 * operations, or 0 if no rebalancing operations were needed. returns -1 if an
 	 * item with key k was not found in the tree.
+	 * O(logn)
 	 */
 	public int delete(int k) {
 		int ops = 0;
 		WAVLNode place = root.searchNode(k),
 				 successor,
-				 fatherOfDelted;
+				 fatherOfDeleted;
 		//if not found
 		if(!place.isRealNode())
 			return -1;
@@ -184,12 +171,12 @@ public class WAVLTree {
 			place.replace(successor);
 			place = successor;
 		}
-		fatherOfDelted = place.dad;
+		fatherOfDeleted = place.dad; // hold it before deletion
 		if(place.getRank() != 0) // is an unary node
 			place.deleteUnary();
 		else // a leaf
 			place.deleteLeaf();
-		ops = reBalance(fatherOfDelted, "delete");
+		ops = reBalance(fatherOfDeleted, "delete");
 		return ops;
 	}
 
@@ -198,6 +185,7 @@ public class WAVLTree {
 	 *
 	 * Returns the info of the item with the smallest key in the tree, or null if
 	 * the tree is empty
+	 * O(logn)
 	 */
 	public String min() {
 		return root.minVal(); // to be replaced by student code
@@ -208,6 +196,7 @@ public class WAVLTree {
 	 *
 	 * Returns the info of the item with the largest key in the tree, or null if the
 	 * tree is empty
+	 * O(logn)
 	 */
 	public String max() {
 		return root.maxVal(); // to be replaced by student code
@@ -218,6 +207,7 @@ public class WAVLTree {
 	 *
 	 * Returns a sorted array which contains all keys in the tree, or an empty array
 	 * if the tree is empty.
+	 * O(n)
 	 */
 	public int[] keysToArray() {
 		int[] arr = new int[root.getSubtreeSize()];
@@ -238,6 +228,7 @@ public class WAVLTree {
 	 *
 	 * Returns an array which contains all info in the tree, sorted by their
 	 * respective keys, or an empty array if the tree is empty.
+	 * O(n)
 	 */
 	public String[] infoToArray() {
 		String[] arr = new String[root.getSubtreeSize()];
@@ -259,6 +250,7 @@ public class WAVLTree {
 	 * Returns the number of nodes in the tree.
 	 *
 	 * precondition: none postcondition: none
+	 * O(1)
 	 */
 	public int size() {
 		return root.getSubtreeSize(); // to be replaced by student code
@@ -270,6 +262,7 @@ public class WAVLTree {
 	 * Returns the root WAVL node, or null if the tree is empty
 	 *
 	 * precondition: none postcondition: none
+	 * O(1)
 	 */
 	public IWAVLNode getRoot() {
 		return root;
@@ -285,6 +278,7 @@ public class WAVLTree {
 	 * node minimal node's successor
 	 *
 	 * precondition: size() >= i > 0 postcondition: none
+	 * O(n)
 	 */
 	public String select(int i) {
 		WAVLNode current = root.minNode();
@@ -292,15 +286,32 @@ public class WAVLTree {
 			current = successor(current);
 		return current.getValue();
 	}
-
+	
+	/**
+	 * return the value of the largest node by key size in the tree
+	 * @return the value of smallest (by key) node so that return.key>this.key || null if this == minimum node of tree
+	 * O(logn)
+	 */
 	public WAVLNode successor(WAVLNode node) {
 		return node.successor();
 	}
 	
+	/**
+	 * return the value of the smallest node by key size in the tree
+	 * @return the value of largest (by key) node so that return.key<this.key || null if this == minimum node of tree
+	 * O(logn)
+	 */
 	public WAVLNode predeccessor(WAVLNode node) {
 		return node.predeccessor();
 	}
-	// returns the root of the new root of the rotate
+	
+	/**
+	 * make a rotate between the two nodes, takes care of ranks and subtree sizes
+	 * @param father
+	 * @param son must be left or right son of father
+	 * @return the new root after the rotate
+	 * O(1)
+	 */
 	public WAVLNode rotate(WAVLNode father, WAVLNode troubleMakerSon) {
 		WAVLNode temp, grandpa = father.getDad();
 		if (father.leftSon == troubleMakerSon) {
@@ -330,7 +341,13 @@ public class WAVLTree {
 		return troubleMakerSon;
 	}	
 
-	// returns the root of the new root of the rotate
+	/**
+	 * make a double rotate between the two nodes, takes care of ranks and subtree sizes
+	 * @param father
+	 * @param son must be left or right son of father
+	 * @return the new root after the rotate
+	 * O(1)
+	 */
 	public WAVLNode doubleRotate(WAVLNode father, WAVLNode son) {
 		WAVLNode holySpirit;
 		if (father.leftSon == son)
@@ -343,20 +360,40 @@ public class WAVLTree {
 		promote(holySpirit);
 		return holySpirit;
 	}
-
+	
+	/**
+	 * promote node to balance the tree
+	 * @param node
+	 * O(1)
+	 */
 	public void promote(WAVLNode node) {
 		node.rank++;
 	}
-
+	
+	/**
+	 * demote node to balance the tree
+	 * @param node
+	 * O(1)
+	 */
 	public void demote(WAVLNode node) {
 		node.rank--;
 	}
 	
+	/**
+	 * double demote right to balance the tree
+	 * @param node
+	 * O(1)
+	 */
 	public void doubleDemoteRight(WAVLNode node) {
 		node.getRight().rank++;
 		node.rank--;
 	}
 	
+	/**
+	 * double demote left to balance the tree
+	 * @param node
+	 * O(1)
+	 */
 	public void doubleDemoteLeft(WAVLNode node) {
 		node.getLeft().rank++;
 		node.rank--;
@@ -401,7 +438,10 @@ public class WAVLTree {
 		public boolean isReal;
 		
 
-		// virtual root constructor
+		/**
+		 * creates a new virtual leaf node with no ancestor
+		 * @param dad
+		 */
 		public WAVLNode() {
 			rank = -1;
 			isReal = false;
@@ -413,7 +453,10 @@ public class WAVLTree {
 			leftSon = null;
 		}
 
-		// virtual leaf constructor
+		/**
+		 * creates a new virtual leaf node with dad as ancestor
+		 * @param dad
+		 */
 		public WAVLNode(WAVLNode dad) {
 			rank = -1;
 			isReal = false;
@@ -425,7 +468,11 @@ public class WAVLTree {
 			leftSon = null;
 		}
 		
-		//real root constructor
+		/**
+		 * creates a new real leaf node with no ancestor
+		 * @param key >0
+		 * @param val
+		 */
 		public WAVLNode(int key, String val) {
 			rank = 0;
 			isReal = true;
@@ -436,25 +483,16 @@ public class WAVLTree {
 			rightSon = new WAVLNode(this);
 			leftSon = new WAVLNode(this);
 		}
-
-		//real leaf constructor
-		public WAVLNode(int key, String val, WAVLNode dad) {
-			rank = 0;
-			isReal = true;
-			treeSize = 1;
-			this.key = key;
-			this.val = val;
-			this.dad = dad;
-			rightSon = new WAVLNode(this);
-			leftSon = new WAVLNode(this);
-		}
 		
 		public boolean isMiddleNode() {
 			return (rightSon.isRealNode() && leftSon.isRealNode());
 		}
-
-
-
+		/**
+		 * replace two real nodes in position within the tree
+		 * @pre this node and node in param must be real
+		 * @param node must be a real node
+		 * O(1)
+		 */
 		public void replace(WAVLNode node) {
 			int tempKey = this.key;
 			String tempVal = this.val;
@@ -464,7 +502,11 @@ public class WAVLTree {
 			node.key = tempKey;
 			node.val = tempVal;
 		}
-
+		/**
+		 * deletes this node in the tree when it is an unary node
+		 * @pre this node is and unary node
+		 * O(1)
+		 */
 		public void deleteUnary() {
 			
 			if(this.dad == null) {
@@ -489,6 +531,11 @@ public class WAVLTree {
 					this.dad.setRightSon(this.rightSon);
 		}
 		
+		/**
+		 * deletes this node in the tree when it is an leaf node
+		 * @pre this node is a leaf
+		 * O(1)
+		 */
 		public void deleteLeaf() {
 			if(this.dad == null)
 				root = new WAVLNode();
@@ -498,6 +545,12 @@ public class WAVLTree {
 				this.dad.setRightSon(new WAVLNode());
 		}
 		
+		/**
+		 * @pre this is a virtual node
+		 * change a place holder virtual node with node
+		 * @param node to be replaced
+		 * O(1)
+		 */
 		private void insertInPlace(WAVLNode node) {
 			if(this.dad == null) {
 				root = node;
@@ -508,7 +561,11 @@ public class WAVLTree {
 			else
 				this.dad.setRightSon(node);
 		}
-
+		
+		/**
+		 * check if this node is a left son
+		 * O(1)
+		 */
 		private boolean isLeftSon() {
 			if (this.dad == null)
 				return false;
@@ -516,53 +573,93 @@ public class WAVLTree {
 		}
 
 
-
+		/**
+		 * set mutually the node given as the right son of this (and this as dad of node)
+		 * O(1)
+		 */
 		public void setRightSon(WAVLNode node) {
 			this.rightSon = node;
 			node.dad = this;
 		}
-
+		
+		/**
+		 * set mutually the node given as the left son of this (and this as dad of node)
+		 * O(1)
+		 */
 		public void setLeftSon(WAVLNode node) {
 			this.leftSon = node;
 			node.dad = this;
 			
 		}
-
+		
+		/**
+		 * calculates the subtree size of this node by adding the size of its sons
+		 * O(1)
+		 */
 		public void updateSize() {
 			treeSize = leftSon.treeSize + rightSon.treeSize +1;
 		}
-
+		
+		/**
+		 * @return -1 if virtual node
+		 * O(1)
+		 */
 		public int getKey() {
 			return key;
 		}
 
+		/**
+		 * @return null if virtual node
+		 * O(1)
+		 */
 		public String getValue() {
 			return val;
 		}
 
+		/**
+		 * @return -1 for virtual node, 0 for leaf
+		 * O(1)
+		 */
 		public int getRank() {
 			return rank;
 		}
 
+		/**
+		 * @return null if virtual node
+		 * O(1)
+		 */
 		public WAVLNode getLeft() {
 			return leftSon;
 		}
 
+		/**
+		 * @return null if virtual node
+		 * O(1)
+		 */
 		public WAVLNode getRight() {
 			return rightSon;
 		}
 
-		// returns null if root
+
+		/**
+		 * @return null if root
+		 * O(1)
+		 */
 		public WAVLNode getDad() {
 			return dad;
 		}
 
-		// Returns True if this is a non-virtual WAVL node (i.e not a virtual leaf or a
-		// sentinal)
+		/**
+		 * @return the largest (by key) node so that return.key<this.key || null if this == minimum node of tree
+		 */
 		public boolean isRealNode() {
 			return isReal;
 		}
-		
+
+		/**
+		 * @return the smallest (by key) node so that return.key>this.key || null if this == maximum node of tree
+		 * O(logn)
+		 */
 		public WAVLNode successor() {
 			if(rightSon.isRealNode())
 				return rightSon.minNode();
@@ -572,24 +669,32 @@ public class WAVLTree {
 				prev = ans;
 				ans = prev.getDad();
 			}
-			
 			return ans;
 			
 		}
 		
+		/**
+		 * return the prev node by key size in the tree
+		 * @return the largest (by key) node so that return.key<this.key || null if this == minimum node of tree
+		 * O(logn)
+		 */
 		public WAVLNode predeccessor() {
 			if(leftSon.isRealNode())
-				return leftSon.minNode();
+				return leftSon.maxNode();
 			WAVLNode prev = this;
 			WAVLNode ans = prev.getDad();
 			while(ans!=null && ans.getLeft()==prev) {
 				prev = ans;
 				ans = prev.getDad();
-			}
-			
+			}			
 			return ans;
 		}
 		
+		/**
+		 * calculate the differences in ranks between this node and its sons
+		 * @return int[] with difference from left son on int[0] and respectively from right in int[1]
+		 * O(1)
+		 */
 		public int[] difs() {
 			if(!isReal)
 				return null;
@@ -599,6 +704,10 @@ public class WAVLTree {
 			return difs;
 		}
 		
+		/**
+		 * check if this node has a valid rank according to the rules of WAVL trees
+		 * O(1)
+		 */
 		public boolean isValidDifs(){
 			int[] difs = this.difs();
 			int[] opt1 = {1,2};
@@ -610,6 +719,12 @@ public class WAVLTree {
 			return false;
 		}
 		
+		
+		/**
+		 * check if this node needs to promoted to keep the ranks valid by
+		 * checking the difference in ranks between this node and its sons
+		 * O(1)
+		 */
 		public boolean needsPromote(){
 			int[] difs = this.difs();
 			int[] opt1 = {1,0};
@@ -619,10 +734,20 @@ public class WAVLTree {
 			return false;
 		}
 		
+		/**
+		 * check if any rotation is needed to balance tree by
+		 * checking the difference in ranks between this node and its sons
+		 * O(1)
+		 */
 		public boolean needsRotate() {
 			return(needsRightRotate()||needsLeftRotate());
 		}
 		
+		/**
+		 * check if rotation to the right needs to be done to balance tree by
+		 * checking the difference in ranks between this node and its sons
+		 * O(1)
+		 */
 		public boolean needsRightRotate(){
 			int[] difs = this.difs();
 			int[] opt1 = {0,2};
@@ -633,6 +758,11 @@ public class WAVLTree {
 			
 		}
 		
+		/**
+		 * check if rotation to the left needs to be done to balance tree by
+		 * checking the difference in ranks between this node and its sons
+		 * O(1)
+		 */
 		public boolean needsLeftRotate(){
 			int[] difs = this.difs();
 			int[] opt1 = {2,0};
@@ -643,6 +773,11 @@ public class WAVLTree {
 			
 		}
 		
+		/**
+		 * check if double rotation to the right needs to be done to balance tree by
+		 * checking the difference in ranks between this node and its sons
+		 * O(1)
+		 */
 		public boolean needsDoubleRotateRight(){
 			if(!needsRightRotate())
 				return false;
@@ -653,6 +788,11 @@ public class WAVLTree {
 			
 		}
 		
+		/**
+		 * check if double rotation to the left needs to be done to balance tree by
+		 * checking the difference in ranks between this node and its sons
+		 * O(1)
+		 */
 		public boolean needsDoubleRotateLeft(){
 			if(!needsLeftRotate())
 				return false;
@@ -663,6 +803,11 @@ public class WAVLTree {
 			
 		}
 		
+		/**
+		 * check if demote needs to be done to balance tree by
+		 * checking the difference in ranks between this node and its sons
+		 * O(1)
+		 */
 		public boolean needsDemote(){
 			int[] difs = this.difs();
 			int[] opt1 = {3,2};
@@ -672,6 +817,11 @@ public class WAVLTree {
 			return false;
 		}
 		
+		/**
+		 * check if double demote to the right needs to be done to balance tree by
+		 * checking the difference in ranks between this node and its sons
+		 * O(1)
+		 */
 		public boolean needsDoubleDemoteRight(){
 			if(!this.needsRightRotate())
 				return false;
@@ -683,6 +833,11 @@ public class WAVLTree {
 				
 		}
 		
+		/**
+		 * check if double demote to the left needs to be done to balance tree by
+		 * checking the difference in ranks between this node and its sons
+		 * O(1)
+		 */
 		public boolean needsDoubleDemoteLeft(){
 			if(!this.needsLeftRotate())
 				return false;
@@ -694,16 +849,20 @@ public class WAVLTree {
 				
 		}
 		
-		
-		
-		
-		//              ****tree methods*****
-		
+		/**
+		 * @return size of subtree of this node
+		 * O(1)
+		 */
 		public int getSubtreeSize() {
 			return treeSize;
 		}
-		
-		// return null if not found
+
+		/**
+		 * search for node
+		 * @param key to search
+		 * @return pointer to node || null if none found
+		 * O(logn)
+		 */
 		public WAVLNode searchNode(int k) {
 			if (!isRealNode() || getKey() == k)
 				return this;
@@ -713,7 +872,12 @@ public class WAVLTree {
 				return rightSon.searchNode(k);
 		}
 		
-		// return null if not found
+		/**
+		 * search for node with key k and return value
+		 * @param key to search
+		 * @return value of node || null if none found
+		 * O(logn)
+		 */
 		public String searchVal(int k) {
 			WAVLNode node = searchNode(k);
 			if (!node.isRealNode())
@@ -721,21 +885,38 @@ public class WAVLTree {
 			return searchNode(k).getValue();
 		}
 		
+		/**
+		 * @return minimal node in subtree
+		 * O(logn)
+		 */
 		public WAVLNode minNode() {
 			if (!this.isRealNode() || !leftSon.isRealNode() )
 				return this;
 			return leftSon.minNode();
 		}
 		
+		/**
+		 * @return value of minimal node in subtree
+		 * O(logn)
+		 */
 		public String minVal() {
 			return this.minNode().getValue();
-		}		
+		}
+		
+		/**
+		 *  @return maximal node in subtree
+		 * O(logn)
+		 */
 		public WAVLNode maxNode() {
 			if (!this.isRealNode() || !rightSon.isRealNode() )
 				return this;
 			return rightSon.maxNode();
 		}
 		
+		/**
+		 * @return value of maximal node in subtree
+		 *  O(logn)
+		 */
 		public String maxVal() {
 			return this.maxNode().getValue();
 		}
