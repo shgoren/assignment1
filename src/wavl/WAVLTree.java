@@ -86,7 +86,7 @@ public class WAVLTree {
 			return -1;
 		node = new WAVLNode(k,i);
 		place.insertInPlace(node);
-		// ops = reBalance(node);
+		ops = reBalance(node);
 		return ops;
 	}
 	
@@ -171,6 +171,7 @@ public class WAVLTree {
 		if(place.isMiddleNode()) {
 			successor = place.successor();
 			place.replace(successor);
+			place = successor;
 		}
 		fatherOfDelted = place.dad;
 		
@@ -178,7 +179,7 @@ public class WAVLTree {
 			place.deleteUnary();
 		else // a leaf
 			place.deleteLeaf();
-		ops = reBalance(fatherOfDelted);
+		//ops = reBalance(fatherOfDelted);
 		return ops;
 	}
 
@@ -260,7 +261,7 @@ public class WAVLTree {
 	 *
 	 * precondition: none postcondition: none
 	 */
-	public WAVLNode getRoot() {
+	public IWAVLNode getRoot() {
 		return root;
 	}
 

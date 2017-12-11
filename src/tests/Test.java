@@ -51,26 +51,30 @@ public class Test {
 	*/	
 
 		tree2.insert(1, "1");
-		System.out.println(tree2.search(1));
+		TreePrinter.printNode(tree2.root);
 		tree2.insert(2, "2");
-		System.out.println(tree2.search(2));
+		TreePrinter.printNode(tree2.root);
 		tree2.insert(3, "3");
-		System.out.println(tree2.search(3));
+		TreePrinter.printNode(tree2.root);
 		tree2.insert(4, "4");
-		System.out.println(tree2.search(4));
+		TreePrinter.printNode(tree2.root);
 		tree2.insert(5, "5");
-		System.out.println(tree2.search(5));
+		TreePrinter.printNode(tree2.root);
 		tree2.insert(6, "6");
-		System.out.println(tree2.search(6));
+		TreePrinter.printNode(tree2.root);
 		tree2.insert(7, "7");
-		System.out.println(tree2.search(7));
-		
+		TreePrinter.printNode(tree2.root);
+
+		TreePrinter.printNode(tree2.root);
 		tree2.delete(7);
-		System.out.println(tree2.search(7));
+
+		TreePrinter.printNode(tree2.root);
 		tree2.delete(2);
-		System.out.println(tree2.search(2));
-		tree2.delete(4);
-		System.out.println(tree2.search(4));
+
+		TreePrinter.printNode(tree2.root);
+		tree2.delete(6);		
+		TreePrinter.printNode(tree2.root);
+		
 		
 		System.out.println(tree2.root.getRank());
 		
