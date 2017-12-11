@@ -87,8 +87,6 @@ public class WAVLTree {
 		node = new WAVLNode(k,i);
 		place.replace(node);
 		ops = reBalance(node, "insert");
-		place.insertInPlace(node);
-		ops = reBalance(node, "insert");
 		return ops;
 	}
 	
@@ -201,7 +199,7 @@ public class WAVLTree {
 			place.deleteUnary();
 		else // a leaf
 			place.deleteLeaf();
-		//ops = reBalance(fatherOfDelted);
+		ops = reBalance(fatherOfDelted, "delete");
 		return ops;
 	}
 
