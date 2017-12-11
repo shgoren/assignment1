@@ -65,6 +65,13 @@ public class Test {
 		tree2.insert(7, "7");
 		System.out.println(tree2.search(7));
 		
+		tree2.delete(7);
+		System.out.println(tree2.search(7));
+		tree2.delete(2);
+		System.out.println(tree2.search(2));
+		tree2.delete(4);
+		System.out.println(tree2.search(4));
+		
 		System.out.println(tree2.root.getRank());
 		
 		
