@@ -76,12 +76,15 @@ public class WAVLTree {
 	 * k already exists in the tree.
 	 */
 	public int insert(int k, String i) {
-		WAVLNode place = root.searchNode(k);
+		int ops = 0;
+		WAVLNode place = root.searchNode(k),
+				 node;
+		
 		if(place.isRealNode())
 			return -1;
-		WAVLNode node  = new WAVLNode(k,i);
+		node = new WAVLNode(k,i);
 		place.replace(node);
-		int ops = reBalance(node);
+		ops = reBalance(node);
 		return ops;
 	}
 	
@@ -140,6 +143,28 @@ public class WAVLTree {
 	 * item with key k was not found in the tree.
 	 */
 	public int delete(int k) {
+		int ops = 0;
+		WAVLNode place = root.searchNode(k),
+				 successor;
+		//if not found
+		if(!place.isRealNode())
+			return -1;
+		// found: is middle node?
+		if(place.isMiddleNode()) {
+			successor = place.successor();
+			place.replace(successor);
+		}
+		if(place.getRank() != 0)
+			if(place.isLeftSon())
+				if(place.leftSon.isRealNode())
+					place.dad.setLeftSon(place.leftSon);
+				else
+					place.dad.setLeftSon(place.rightSon);
+			else
+				if(place.rightSon.isRealNode())
+					place.dad.setRightSon(place.leftSon);
+				else
+					place.dad.setRightSon(place.rightSon);
 		return 42;
 	}
 
@@ -353,44 +378,6 @@ public class WAVLTree {
 			leftSon = null;
 		}
 		
-		
-		
-		public void replace(WAVLNode node) {
-			if (this.dad == null) {
-				root = node;
-				return;
-			}
-			if(this.isLeftSon())
-				this.dad.setLeftSon(node);
-			else
-				this.dad.setRightSon(node);
-			
-		}
-
-
-
-		private boolean isLeftSon() {
-			return (this.dad.leftSon == this);
-		}
-
-
-
-		public void setRightSon(WAVLNode node) {
-			this.rightSon = node;
-			node.dad = this;
-		}
-
-		public void setLeftSon(WAVLNode node) {
-			this.leftSon = node;
-			node.dad = this;
-			
-		}
-
-		public void updateSize() {
-			treeSize = leftSon.treeSize + rightSon.treeSize +1;
-		}
-		
-
 		// virtual leaf constructor
 		public WAVLNode(WAVLNode dad) {
 			rank = -1;
@@ -425,6 +412,66 @@ public class WAVLTree {
 			this.dad = dad;
 			rightSon = new WAVLNode(this);
 			leftSon = new WAVLNode(this);
+		}
+		
+		public boolean isMiddleNode() {
+			return (rightSon.isRealNode() && leftSon.isRealNode());
+		}
+
+
+
+		public void replace(WAVLNode node) {
+			WAVLNode thisFather = this.dad,
+					 nodeFather = node.dad,
+					 nodeLeftChild = node.leftSon,
+					 nodeRightChild = node.rightSon;
+			node.setLeftSon(this.leftSon);
+			node.setRightSon(this.rightSon);
+			this.setLeftSon(nodeLeftChild);
+			this.setRightSon(nodeRightChild);
+			
+			if (thisFather == null) {
+				root = node;
+				return;
+			}
+			
+			if(this.isLeftSon())
+				thisFather.setLeftSon(node);
+			else
+				thisFather.setRightSon(node);
+			
+			//
+			if (nodeFather != null)
+				if(node.isLeftSon())
+					nodeFather.setLeftSon(this);
+				else
+					nodeFather.setRightSon(this);
+				
+		}
+
+
+
+		private boolean isLeftSon() {
+			return (this.dad.leftSon == this);
+		}
+
+
+
+		public void setRightSon(WAVLNode node) {
+			this.rightSon = node;
+			if (node.dad != null)
+				node.dad = this;
+		}
+
+		public void setLeftSon(WAVLNode node) {
+			this.leftSon = node;
+			if (node.dad != null)
+				node.dad = this;
+			
+		}
+
+		public void updateSize() {
+			treeSize = leftSon.treeSize + rightSon.treeSize +1;
 		}
 
 		public int getKey() {
