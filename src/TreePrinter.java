@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import wavl.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
 public class TreePrinter {
 
 	    public static <T extends Comparable<?>> void printNode(WAVLTree.IWAVLNode root) {
-	        int maxLevel = TreePrinter.maxLevel(root);?
+	        int maxLevel = TreePrinter.maxLevel(root);
 
 	        printNodeInternal(Collections.singletonList(root), 1, maxLevel);
 	    }

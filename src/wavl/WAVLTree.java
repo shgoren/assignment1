@@ -104,6 +104,7 @@ public class WAVLTree {
 			if(curr.needsDemote()) {
 				demote(curr);
 				ops++;
+				curr = curr.getDad();
 				continue;
 					
 			}
@@ -117,6 +118,7 @@ public class WAVLTree {
 				if(curr.needsDoubleDemoteRight()) {
 					doubleDemoteRight(curr);
 					ops+=2;
+					curr = curr.getDad();
 					continue;
 				}
 				else {
@@ -136,6 +138,7 @@ public class WAVLTree {
 				if(curr.needsDoubleDemoteLeft()) {
 					doubleDemoteLeft(curr);
 					ops+=2;
+					curr = curr.getDad();
 					continue;
 				}
 				else {
@@ -155,7 +158,8 @@ public class WAVLTree {
 	public void changeSize(WAVLNode node, String state) {
 		if(state.equals("delete"))
 			node.treeSize--;
-		node.treeSize++;
+		else
+			node.treeSize++;
 	}
 
 	/**
