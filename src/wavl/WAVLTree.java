@@ -2,7 +2,6 @@ package wavl;
 
 import java.util.Arrays;
 
-import com.sun.org.apache.xpath.internal.axes.NodeSequence;
 
 /**
  * Ran Armony & Shahaf Goren
@@ -85,8 +84,6 @@ public class WAVLTree {
 		if(place.isRealNode())
 			return -1;
 		node = new WAVLNode(k,i);
-		place.replace(node);
-		ops = reBalance(node, "insert");
 		place.insertInPlace(node);
 		ops = reBalance(node, "insert");
 		return ops;
@@ -183,25 +180,12 @@ public class WAVLTree {
 			place.replace(successor);
 			place = successor;
 		}
-		if(place.getRank() != 0)
-			if(place.isLeftSon())
-				if(place.leftSon.isRealNode())
-					place.dad.setLeftSon(place.leftSon);
-				else
-					place.dad.setLeftSon(place.rightSon);
-			else
-				if(place.rightSon.isRealNode())
-					place.dad.setRightSon(place.leftSon);
-				else
-					place.dad.setRightSon(place.rightSon);
-		ops = reBalance(place.dad, "delete");
 		fatherOfDelted = place.dad;
-		
 		if(place.getRank() != 0) // is an unary node
 			place.deleteUnary();
 		else // a leaf
 			place.deleteLeaf();
-		//ops = reBalance(fatherOfDelted);
+		ops = reBalance(fatherOfDelted, "delete");
 		return ops;
 	}
 

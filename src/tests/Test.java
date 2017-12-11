@@ -51,28 +51,21 @@ public class Test {
 	*/	
 
 		tree2.insert(1, "1");
-		TreePrinter.printNode(tree2.root);
 		tree2.insert(2, "2");
-		TreePrinter.printNode(tree2.root);
 		tree2.insert(3, "3");
-		TreePrinter.printNode(tree2.root);
 		tree2.insert(4, "4");
-		TreePrinter.printNode(tree2.root);
 		tree2.insert(5, "5");
-		TreePrinter.printNode(tree2.root);
 		tree2.insert(6, "6");
-		TreePrinter.printNode(tree2.root);
 		tree2.insert(7, "7");
-		TreePrinter.printNode(tree2.root);
 
 		TreePrinter.printNode(tree2.root);
-		tree2.delete(7);
+		tree2.delete(1);
 
 		TreePrinter.printNode(tree2.root);
 		tree2.delete(2);
 
 		TreePrinter.printNode(tree2.root);
-		tree2.delete(6);		
+		tree2.delete(3);		
 		TreePrinter.printNode(tree2.root);
 		
 		
