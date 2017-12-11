@@ -1,16 +1,18 @@
 package tests;
 
-import java.util.Arrays;
-
 import wavl.WAVLTree;
 import wavl.WAVLTree.WAVLNode;
 
 public class Test {
 	
 	public static void main(String[] args) {
-
-		WAVLTree tree1 = new WAVLTree();
+		int[] insertCounter = new int[10],
+			  deleteCounter = new int[10];
+		int maxInsert = 0,
+			maxDelete = 0,
+			currOps = 0;
 		WAVLTree tree2 = new WAVLTree();
+<<<<<<< HEAD
 		//WAVLNode node1 = tree1.new WAVLNode();
 		//WAVLNode node2 = tree2.new WAVLNode(2,"two");
 		//tree2.test();
@@ -63,6 +65,10 @@ public class Test {
 		tree2.insert(6, "6");
 		TreePrinter.printNode(tree2.root);
 		tree2.insert(7, "7");
+		System.out.println("testing size");
+		System.out.println(tree2.root.getSizeRec());
+		System.out.println("finished testing size");
+
 		TreePrinter.printNode(tree2.root);
 
 		TreePrinter.printNode(tree2.root);
@@ -74,8 +80,35 @@ public class Test {
 		TreePrinter.printNode(tree2.root);
 		tree2.delete(6);		
 		TreePrinter.printNode(tree2.root);
+=======
+		for(int i=1; i<=10; i++) {
+			for(int j=1; j<=i*10000;j++) {
+				currOps = tree2.insert(j,""+j);
+				insertCounter[i-1] += currOps;
+				if (currOps>maxInsert)
+					maxInsert = currOps;
+			}
+			for(int j=1; j<=i*10000;j++) {
+				currOps = tree2.delete(j);
+				deleteCounter[i-1] += currOps;
+				if (currOps>maxDelete)
+					maxDelete = currOps;
+			}
+		}
+		System.out.println("max number of insert rebalance operations:" + maxInsert);
+		System.out.println("total operations of rebalances for inserts in experiments:");
+		for(int i=0; i<10; i++)
+			System.out.println("     experiment number: "+(i+1)+":"+insertCounter[i]+
+					"\t\n          average is: "+insertCounter[i]/((i+1)*10000.0));
+>>>>>>> fe1f917ea21f198f22e4d5e245b25f3f422fca2f
 		
+		System.out.println("\n");
 		
+		System.out.println("max number of insert rebalance operations:" + maxDelete);
+		System.out.println("total operations of rebalances for deletions in experiments:");
+		for(int i=0; i<10; i++)
+			System.out.println("     experiment number: "+(i+1)+":"+deleteCounter[i]+
+					"\t\n          average is: "+(deleteCounter[i]/((i+1)*10000.0)));
 		
 		
 
