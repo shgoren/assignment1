@@ -647,7 +647,7 @@ public class WAVLTree {
 					return true;
 			return false;
 		}
-		//not in use
+		
 		public boolean needsDoubleDemoteRight(){
 			if(!this.needsRightRotate())
 				return false;
@@ -658,7 +658,7 @@ public class WAVLTree {
 			return false;
 				
 		}
-		//not in use
+		
 		public boolean needsDoubleDemoteLeft(){
 			if(!this.needsLeftRotate())
 				return false;
