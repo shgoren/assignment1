@@ -20,7 +20,7 @@ public class WAVLTree {
 	 * public boolean empty()
 	 *
 	 * returns true if and only if the tree is empty
-	 *
+	 * O(1)
 	 */
 	public WAVLTree() {
 		root = new WAVLNode();
