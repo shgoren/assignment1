@@ -88,7 +88,7 @@ public class WAVLTree {
 		place.replace(node);
 		ops = reBalance(node, "insert");
 		place.insertInPlace(node);
-		ops = reBalance(node);
+		ops = reBalance(node, "insert");
 		return ops;
 	}
 	

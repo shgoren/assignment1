@@ -76,8 +76,6 @@ public class Test {
 		TreePrinter.printNode(tree2.root);
 		
 		
-		System.out.println(tree2.root.getRank());
-		
 		
 		
 
