@@ -86,7 +86,7 @@ public class WAVLTree {
 			return -1;
 		node = new WAVLNode(k,i);
 		place.insertInPlace(node);
-		ops = reBalance(node);
+		// ops = reBalance(node);
 		return ops;
 	}
 	
@@ -178,19 +178,7 @@ public class WAVLTree {
 			place.deleteUnary();
 		else // a leaf
 			place.deleteLeaf();
-		// ops = reBalance(fatherOfDelted);
-		if(place.getRank() != 0)
-			if(place.isLeftSon())
-				if(place.leftSon.isRealNode())
-					place.dad.setLeftSon(place.leftSon);
-				else
-					place.dad.setLeftSon(place.rightSon);
-			else
-				if(place.rightSon.isRealNode())
-					place.dad.setRightSon(place.leftSon);
-				else
-					place.dad.setRightSon(place.rightSon);
-		ops = reBalance(place.dad);
+		ops = reBalance(fatherOfDelted);
 		return ops;
 	}
 
@@ -452,55 +440,17 @@ public class WAVLTree {
 
 
 		public void replace(WAVLNode node) {
-			WAVLNode thisFather = this.dad,
-					 nodeFather = node.dad,
-					 nodeLeftChild = node.leftSon,
-					 nodeRightChild = node.rightSon;
-			boolean thisIsRoot =false,
-					nodeIsRoot = false;
-			int temp = 0;
-			boolean nodeWasLeftSon;
+			int tempKey = this.key;
+			String tempVal = this.val;
 			
-			// replacing two real nodes
-			if(this.isRealNode() && node.isRealNode()) {
-				//replace fields
-				temp = node.getRank();
-				node.rank = this.rank;
-				this.rank = temp;
-				
-				temp = node.getSubtreeSize();
-				node.treeSize = this.treeSize;
-				this.treeSize = temp;
-
-				// replace place children
-				node.setLeftSon(this.leftSon);
-				node.setRightSon(this.rightSon);
-				this.setLeftSon(nodeLeftChild);
-				this.setRightSon(nodeRightChild);
-				
-				//replace fathers
-				nodeWasLeftSon = node.isLeftSon();
-				if (thisFather == null) {
-					root = node;
-					node.dad = null;
-				}
-				else if(this.isLeftSon())
-					thisFather.setLeftSon(node);
-				else
-					thisFather.setRightSon(node);
-
-
-				if (nodeFather == null) {
-					root = this;
-					this.dad = null;
-				} else if(nodeWasLeftSon)
-					nodeFather.setLeftSon(this);
-				else
-					nodeFather.setRightSon(this);
-			}				
+			this.key = node.key;
+			this.val = node.val;
+			node.key = tempKey;
+			node.val = tempVal;
 		}
 
 		public void deleteUnary() {
+			
 			if(this.dad == null) {
 				if(leftSon.isRealNode()) {
 					root = this.leftSon;
@@ -544,6 +494,8 @@ public class WAVLTree {
 		}
 
 		private boolean isLeftSon() {
+			if (this.dad == null)
+				return false;
 			return (this.dad.leftSon == this);
 		}
 
