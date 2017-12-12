@@ -1,46 +1,73 @@
 package tests;
 
 import wavl.WAVLTree;
-import wavl.WAVLTree.WAVLNode;
+import java.util.Random;
 
 public class Test {
-	
+
 	public static void main(String[] args) {
-		int[] insertCounter = new int[10],
-			  deleteCounter = new int[10];
-		int maxInsert = 0,
-			maxDelete = 0,
-			currOps = 0;
-		WAVLTree tree2 = new WAVLTree();
-		for(int i=1; i<=10; i++) {
-			for(int j=1; j<=i*10000;j++) {
-				currOps = tree2.insert(j,""+j);
-				insertCounter[i-1] += currOps;
-				if (currOps>maxInsert)
-					maxInsert = currOps;
+		WAVLTree tree = new WAVLTree();
+		int length = 100000,
+			insertCounter = 0,
+			deleteCounter = 0,
+			deleteMaxCount = 0,
+			insertMaxCount =0;	
+		int[] insertCounterArr = new int[10],
+			  deleteCounterArr = new int[10],
+			  insertMaxCountArr = new int[10],
+			  deleteMaxCountArr = new int[10];
+		double[] insertAverageArr = new double[10],
+			     deleteAverageArr = new double[10];
+		Random randomGenerator = new Random();
+		
+		for (int i=1; i<=length; i++) {
+			int j = i/10000;
+			int n = randomGenerator.nextInt(1000000000);
+			int tmp = tree.insert(n, "");
+			//if n is already in the tree
+			if (tmp==-1) {
+				i--;
+				continue;
 			}
-			for(int j=1; j<=i*10000;j++) {
-				currOps = tree2.delete(j);
-				deleteCounter[i-1] += currOps;
-				if (currOps>maxDelete)
-					maxDelete = currOps;
+			insertCounter += tmp;
+			if (tmp > insertMaxCount) {
+				insertMaxCount = tmp;
+			}
+			if (i%10000 == 0) {
+				insertMaxCountArr[j-1] = insertMaxCount;
+				insertCounterArr[j-1] = insertCounter;
+				insertAverageArr[j-1] = ((double)insertCounter)/i;
 			}
 		}
-		System.out.println("max number of insert rebalance operations:" + maxInsert);
-		System.out.println("total operations of rebalances for inserts in experiments:");
-		for(int i=0; i<10; i++)
-			System.out.println("     experiment number: "+(i+1)+":"+insertCounter[i]+
-					"\t\n          average is: "+insertCounter[i]/((i+1)*10000.0));
 		
-		System.out.println("\n");
+		int[] keysArray = tree.keysToArray();
+		//delete
+		for (int i=1; i<=keysArray.length; i++) {
+			int j = i/10000;
+			int tmp = tree.delete(keysArray[i-1]);
+			deleteCounter += tmp;
+			if (tmp > deleteMaxCount) {
+				deleteMaxCount = tmp;
+			}
+			if ((i)%10000 == 0) {
+				// document state of experiment
+				deleteMaxCountArr[j-1] = deleteMaxCount;
+				deleteCounterArr[j-1] = deleteCounter;
+				deleteAverageArr[j-1] = ((double)deleteCounter)/i;
+			}
+		}
 		
-		System.out.println("max number of insert rebalance operations:" + maxDelete);
-		System.out.println("total operations of rebalances for deletions in experiments:");
-		for(int i=0; i<10; i++)
-			System.out.println("     experiment number: "+(i+1)+":"+deleteCounter[i]+
-					"\t\n          average is: "+(deleteCounter[i]/((i+1)*10000.0)));
-		
-		
+		//print
+		for(int i=0; i<10; i++) {
+			System.out.println();
+			System.out.println("num of nodes = " + (i+1)*10000 );
+			System.out.println("insertCounter: " + insertCounterArr[i]);
+			System.out.println("deleteCounter: " + deleteCounterArr[i]);
+			System.out.println("avgInsert: " + insertAverageArr[i]);
+			System.out.println("avgDelete: " + deleteAverageArr[i]);
+			System.out.println("insertMaxCount: " + insertMaxCountArr[i]);
+			System.out.println("deleteMaxCount: " + deleteMaxCountArr[i]);
+		}
 
 	}
 	
