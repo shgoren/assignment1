@@ -334,6 +334,8 @@ public class WAVLTree {
 		else
 			grandpa.setRightSon(troubleMakerSon);
 		
+		if(father.rank > troubleMakerSon.rank)
+			promote(troubleMakerSon);
 		demote(father);
 		father.updateSize();
 		troubleMakerSon.updateSize();
@@ -350,14 +352,17 @@ public class WAVLTree {
 	 */
 	public WAVLNode doubleRotate(WAVLNode father, WAVLNode son) {
 		WAVLNode holySpirit;
+		int[] fatherDifs = father.difs();
+		boolean deletion = fatherDifs[0] == 3 || fatherDifs[1] ==3;
+		
 		if (father.leftSon == son)
 			holySpirit = son.rightSon;
 		else
 			holySpirit = son.leftSon;
 		rotate(son, holySpirit);
 		rotate(father, holySpirit);	
-		
-		promote(holySpirit);
+		if(deletion)
+			demote(father);
 		return holySpirit;
 	}
 	
@@ -812,7 +817,8 @@ public class WAVLTree {
 			int[] difs = this.difs();
 			int[] opt1 = {3,2};
 			int[] opt2 = {2,3};
-			if(difs != null && (Arrays.equals(difs, opt1) || Arrays.equals(difs, opt2)) )
+			int[] opt3 = {2,2};
+			if(difs != null && (Arrays.equals(difs, opt1) || Arrays.equals(difs, opt2)) ||  (Arrays.equals(difs, opt3) && !this.leftSon.isRealNode() ) )
 					return true;
 			return false;
 		}

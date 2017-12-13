@@ -24,7 +24,7 @@ public class Test {
 			int j = i/10000;
 			int n = randomGenerator.nextInt(1000000000);
 			int tmp = tree.insert(n, "");
-			//if n is already in the tree
+			 //if n is already in the tree
 			if (tmp==-1) {
 				i--;
 				continue;
@@ -33,7 +33,7 @@ public class Test {
 			if (tmp > insertMaxCount) {
 				insertMaxCount = tmp;
 			}
-			if (i%10000 == 0) {
+			if (i%10000 == 0) {	
 				insertMaxCountArr[j-1] = insertMaxCount;
 				insertCounterArr[j-1] = insertCounter;
 				insertAverageArr[j-1] = ((double)insertCounter)/i;
@@ -43,13 +43,15 @@ public class Test {
 		int[] keysArray = tree.keysToArray();
 		//delete
 		for (int i=1; i<=keysArray.length; i++) {
+			if (i == 28271)
+				System.out.print("");
 			int j = i/10000;
 			int tmp = tree.delete(keysArray[i-1]);
 			deleteCounter += tmp;
 			if (tmp > deleteMaxCount) {
 				deleteMaxCount = tmp;
 			}
-			if ((i)%10000 == 0) {
+			if (i%10000 == 0) {
 				// document state of experiment
 				deleteMaxCountArr[j-1] = deleteMaxCount;
 				deleteCounterArr[j-1] = deleteCounter;
