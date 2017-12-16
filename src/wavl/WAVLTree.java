@@ -337,6 +337,9 @@ public class WAVLTree {
 		if(father.rank > troubleMakerSon.rank)
 			promote(troubleMakerSon);
 		demote(father);
+		// check if father is a leaf with 2,2
+		if(father.needsDemote())
+			demote(father);
 		father.updateSize();
 		troubleMakerSon.updateSize();
 		
@@ -353,16 +356,13 @@ public class WAVLTree {
 	public WAVLNode doubleRotate(WAVLNode father, WAVLNode son) {
 		WAVLNode holySpirit;
 		int[] fatherDifs = father.difs();
-		boolean deletion = fatherDifs[0] == 3 || fatherDifs[1] ==3;
 		
 		if (father.leftSon == son)
 			holySpirit = son.rightSon;
 		else
 			holySpirit = son.leftSon;
 		rotate(son, holySpirit);
-		rotate(father, holySpirit);	
-		if(deletion)
-			demote(father);
+		rotate(father, holySpirit);
 		return holySpirit;
 	}
 	
@@ -534,6 +534,7 @@ public class WAVLTree {
 					this.dad.setRightSon(this.leftSon);
 				else
 					this.dad.setRightSon(this.rightSon);
+
 		}
 		
 		/**
@@ -818,11 +819,15 @@ public class WAVLTree {
 			int[] opt1 = {3,2};
 			int[] opt2 = {2,3};
 			int[] opt3 = {2,2};
-			if(difs != null && (Arrays.equals(difs, opt1) || Arrays.equals(difs, opt2)) ||  (Arrays.equals(difs, opt3) && !this.leftSon.isRealNode() ) )
+			if(difs != null && (Arrays.equals(difs, opt1) || Arrays.equals(difs, opt2)) ||  ( Arrays.equals(difs, opt3) && this.isLeaf() ) )
 					return true;
 			return false;
 		}
 		
+		private boolean isLeaf() {
+			return !(rightSon.isRealNode() || leftSon.isRealNode());
+		}
+
 		/**
 		 * check if double demote to the right needs to be done to balance tree by
 		 * checking the difference in ranks between this node and its sons

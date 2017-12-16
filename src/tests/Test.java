@@ -4,6 +4,35 @@ import wavl.WAVLTree;
 import java.util.Random;
 
 public class Test {
+	
+	public static boolean CheckTree(WAVLTree.WAVLNode moshe)
+	{
+		if(moshe==null || !moshe.isRealNode())
+		{
+			return true;
+		}
+		else {
+		int rightRank=moshe.getRank()-((WAVLTree.WAVLNode)moshe.getRight()).getRank();
+		int leftRank=moshe.getRank()-((WAVLTree.WAVLNode)moshe.getLeft()).getRank();
+		if(!((rightRank==2 && leftRank==1) || (rightRank==1 && leftRank==2)||(rightRank==2 && leftRank==2) || (rightRank==1 && leftRank==1)))
+		{
+			System.out.println("illegal rank diffrence");
+			return false;
+		}
+		else
+		{
+			if(rightRank==2 && leftRank==2)
+			{
+				if(!moshe.getRight().isRealNode()&&!moshe.getLeft().isRealNode())
+				{
+					System.out.println("leaf with 2,2");
+					return false;
+				}
+			}
+		}
+		return CheckTree((WAVLTree.WAVLNode)moshe.getLeft()) && CheckTree((WAVLTree.WAVLNode)moshe.getRight());
+		}
+	}
 
 	public static void main(String[] args) {
 		WAVLTree tree = new WAVLTree();
@@ -18,7 +47,7 @@ public class Test {
 			  deleteMaxCountArr = new int[10];
 		double[] insertAverageArr = new double[10],
 			     deleteAverageArr = new double[10];
-		Random randomGenerator = new Random();
+		Random randomGenerator = new Random(2);
 		
 		for (int i=1; i<=length; i++) {
 			int j = i/10000;
@@ -69,8 +98,9 @@ public class Test {
 			System.out.println("avgDelete: " + deleteAverageArr[i]);
 			System.out.println("insertMaxCount: " + insertMaxCountArr[i]);
 			System.out.println("deleteMaxCount: " + deleteMaxCountArr[i]);
+			
 		}
-
+			
 	}
 	
 }
