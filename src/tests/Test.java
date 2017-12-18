@@ -47,7 +47,7 @@ public class Test {
 			  deleteMaxCountArr = new int[10];
 		double[] insertAverageArr = new double[10],
 			     deleteAverageArr = new double[10];
-		Random randomGenerator = new Random(2);
+		Random randomGenerator = new Random();
 		
 		for (int i=1; i<=length; i++) {
 			int j = i/10000;
