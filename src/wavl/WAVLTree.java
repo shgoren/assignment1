@@ -4,7 +4,8 @@ import java.util.Arrays;
 
 
 /**
- * Ran Armony & Shahaf Goren
+ * Shahaf Goren, username: shahafgoren , ID num: 203269931
+ * Ran Armoni, username:ranarmoni, ID num:204027312
  *
  * WAVLTree
  *
