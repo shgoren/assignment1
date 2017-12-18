@@ -356,8 +356,6 @@ public class WAVLTree {
 	 */
 	public WAVLNode doubleRotate(WAVLNode father, WAVLNode son) {
 		WAVLNode holySpirit;
-		int[] fatherDifs = father.difs();
-		
 		if (father.leftSon == son)
 			holySpirit = son.rightSon;
 		else
